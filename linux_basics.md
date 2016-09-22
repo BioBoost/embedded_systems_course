@@ -31,6 +31,49 @@ First is the Linux kernel which was created in 1991 by a Finnish computer scienc
 
 Second, are so-called "Linux distributions", also called a distro . They are complete operating systems that consist of the Linux kernel itself and many other applications and software packages. Because they typically contain a lot of software created by the GNU project, some people (mostly GNU guys themselves) claim that they should be called GNU/Linux instead of just Linux.
 
+When we are talking about embedded Linux we actually are talking about the same kernel code running on millions of other systems. There is no separate code base for embedded systems. When we however build a Linux system for an embedded target we do exclude features we won't be using. We are also cross-compiling the kernel to binary code that can run on the target system.
+
+### The Linux kernel
+
+The Linux kernel provides the core system facilities required for any system based upon Linux to operate correctly. It has complete control over everything that occurs in the system. Application software relies upon specific features of the Linux kernel such as its handling of hardware devices and its provision of many fundamental abstractions such as virtual memory, sockets, tasks (known as processes), files and many others. A diagram is shown below
+
+[The Linux kernel and it's services](img/kernel_services.png)
+
+
+
+
+The main roles of the kernel are
+
+* Manage all the hardware resources such as CPU, memory, I/O, ...
+* Provide a set of portable, architecture - and hardware independent APIs (Application Programmable Interface) to allow user space applications and libraries to use the hardware resources.
+* Handle concurrent accesses and usage of hardware resources from different applications. Example: a single network interface is used by multiple user space applications through various network connections. The kernel is responsible for "multiplexing" the hardware resource.
+
+The main interface between the kernel and user space is the set of system calls that are provided by the kernel (about 300 system calls that provide the main kernel services).
+
+These services include:
+
+* file and device operations
+* networking operations
+* inter-process communication
+* process management
+* memory mapping
+* timers
+* threads
+* synchronization primitives
+* ...
+
+Some key features of the kernel are:
+
+* Portability and hardware support: it runs on most architectures.
+* Scalability: Linux can run on super computers as well as on tiny devices (4 MB of RAM is enough).
+* Compliance to standards and interoperability
+* Exhaustive networking support
+* Security: It can't hide its ﬂaws. Its code is reviewed by many experts.
+* Stability and reliability
+* Modularity: Can include only what a system needs even at run time.
+* Easy to program: You can learn from existing code. Many useful resources on the net.
+
+Very important to know is that the kernel interface is stable over time. This basically means that only new system calls can be added by the kernel developers and no old calls can be removed. This means that applications running on an older kernel version should always work on a newer one. The system call interface is actually wrapped by the C library and user space applications usually never make a system call directly but rather use the corresponding C library functions.
 
 ## The MAN-pages
 
