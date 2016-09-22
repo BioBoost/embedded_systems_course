@@ -56,7 +56,9 @@ In the next step we get the option to create a dynamically allocated image or a 
 
 Now we need to select the hard drive file location (leave it as is) and size of the drive. Make sure to select **at least 25GB for the size** as shown in the figure below. Hitting create will finish the process of creating a VM.
 
-!!! warning "Image resize" If you chose to create a dynamically allocated image you can make it even bigger as it will only use as much space as needed. Resizing an existing image can be a real pain and can also corrupt your image so make sure you don't have to do this.
+> #### Warning::Image resize
+>
+> If you chose to create a dynamically allocated image you can make it even bigger as it will only use as much space as needed. Resizing an existing image can be a real pain and can also corrupt your image so make sure you don't have to do this.
 
 ![Creating a VM - Location and size of the virtual drive](img/vm_size.png)
 
@@ -118,7 +120,9 @@ Open the Devices menu which can be found at the top of the VM window. Next selec
 
 Once finished remove the image from the virtual drive (by right clicking the icon on the Desktop of Linux Mint and choosing Eject). Restart the virtual machine.
 
-!!! warning "Updates" Every time you update your machine it is necessary to repeat this procedure.
+> #### Warning::Updates
+>
+> Every time you update your machine it is necessary to repeat this procedure.
 
 You should now be able to resize the guest window. Or you can switch to fullscreen by hitting `RCTRL-F`.
 
