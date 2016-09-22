@@ -2,3 +2,8 @@
 figure {
 	text-align: center;
 }
+
+.markdown-section pre > code {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
