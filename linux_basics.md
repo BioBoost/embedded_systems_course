@@ -1,10 +1,33 @@
 # Linux Basics
 
-While the information and examples presented here will be valid for most Linux distro's, some information and commands may only work for Debian based distro's.
+The Raspberry Pi 2 embedded system is quite a complex system with a lot of features and complicated hardware. While it is possible to write software that run directly on the embedded processor (called a bare-metal application) it is way to complex. Typically an Operating System (OS) is installed to manage all the hardware and resources making it easier for software developers to create application to run on the system. That way the hardware can be accessed through services provided by the OS.
+
+Choosing an operating system for an embedded system mainly depends on the hardware as not each operating system will provide support for the embedded system.
+
+Some existing operating systems are shown in the image below:
+
+![Some operating systems](img/list-of-operating-systems.jpg)
+
+The ones that have support for the Raspberry Pi 2 are:
+
+* Raspbian, Ubuntu Mate, OSMC, OpenElec, ... (Linux based)
+* Windows IoT core (Windows based)
+* Risc OS (Real-time OS)
+
+Further down the course we will focus on the Raspbian linux distribution.
+
+> #### Note::
+> While the information and examples presented here will be valid for most Linux distro's, some information and commands may only work for Debian based distro's.
 
 ## Linux kernel and Linux Distribution
 
-[TODO]
+Linux was originally developed as a free operating system for personal computers based on the Intel x86 architecture, but has since been ported to more computer hardware platforms than any other operating system. This includes desktop PCs, servers, mainframes, supercomputers, smartphones, tablets, TVs, embedded systems, ... Guess what your TV decoder at home is running.
+
+When people refer to linux, it can actually mean two different things.
+
+First is the Linux kernel which was created in 1991 by a Finnish computer science student called Linus Torvalds. It was based on the Minix operating system. Linus made the project open source and allowed people to freely use and contribute to the Linux kernel. Currently the official kernel received contributions from over 12000 programmers.
+
+Second, are so-called "Linux distributions", also called a distro . They are complete operating systems that consist of the Linux kernel itself and many other applications and software packages. Because they typically contain a lot of software created by the GNU project, some people (mostly GNU guys themselves) claim that they should be called GNU/Linux instead of just Linux.
 
 
 ## The MAN-pages
@@ -18,11 +41,27 @@ pi@HAL:/$ man ls
 Which gives the output shown in the image below. We can for example see if we add "-a" after the "ls" command it will also display hidden files (In Linux hidden files start with a dot, for example ".ssh"). You can scroll through the man-pages using the arrow keys.
 
 ![Output of "man ls" command](img/man_pages_ls.png)
-:   Output of "man ls" command
 
 Searching the current man-page can be done by first typing a slash ("/"), followed by your search term. Jumping to the next hit can be done by hitting the "n" key, while jumping back is done with "SHIFT-n".
 
 Exiting the man-pages is achieved by hitting the "q" key.
+
+> #### Assignment::The cat command
+>
+> What does the `cat` command do? How can it be used to output the content of a file? Try to read the file "/proc/cpuinfo"
+
+-
+
+> #### Assignment::The dmesg command
+>
+> What does the `dmesg` command do?
+
+-
+
+> #### Assignment::The free command
+>
+> The `free` command shows the system memory usage. How can you make the numbers "human readable"?
+
 
 ## The Linux Filesystem
 

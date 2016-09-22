@@ -2,5 +2,15 @@
     "plugins": [
         "callouts",
         "image-captions"
-    ]
+    ],
+    "pluginsConfig": {
+        "callouts":
+        {
+            "showTypeInHeader": false,
+            "assignment": {
+                "alert": "success",
+                "picto": "fa-lightbulb-o"
+            }
+        }
+    }
 }

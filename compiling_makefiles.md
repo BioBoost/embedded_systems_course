@@ -287,7 +287,7 @@ clean:
 	rm -f *.o $(EXECUTABLE)
 ```
 
-> #### Hint::Assignment 5.1
+> #### Success::Assignment 5.1
 >
 > Create a simple hello world program (in C++) with an accompanied makefile. Do however use gcc instead of g++. Remember you have to add something for the linker. Also take note that the argument needs to be supplied to the linker and not actually to the compiler. So for extra credits make sure to do it DRY. Zip it all up and upload it to Toledo. Make sure to execute a `make clean`.
 
