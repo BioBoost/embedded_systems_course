@@ -5,4 +5,3 @@
 * [Linux Basics](linux_basics.md)
 * [Rpi Operating System](rpi_operating_system.md)
 * [About](about.md)
-* [ToDo](todo.md)
