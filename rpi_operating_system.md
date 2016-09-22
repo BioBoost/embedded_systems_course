@@ -67,7 +67,7 @@ Raspbian comes default with the SSH daemon enabled. This allows us to connect to
 
 Another option can be a network scan tool such as SoftPerfect Network Scanner (can be downloaded from [http://www.softperfect.com/products/networkscanner/](http://www.softperfect.com/products/networkscanner/)) which allows you to scan a range of IP addresses and display some basic information about them such as the MAC (Media Access Control) address and the hostname.
 
-This would not be an option in a LAB if there are 12 Pi's connected to the same subnet all with the default configuration of Raspbian. However for your convenience we added labels on the Pi's with their respective MAC addresses so you can identify which Pi is yours.
+This would not be an option in a LAB if there are 12 Pi's connected to the same subnet all with the default configuration of Raspbian. This problem can be solved by injecting the rpi-hello script into the Raspbian image. See the last section of this chapter for more info.
 
 ![Network scan using SoftPerfect Network Scanner](img/network_scan.png)
 
@@ -281,7 +281,7 @@ Update this tool (raspi-config) to the latest version. This requires an active I
 At this point you should be able to login to the Pi using the pi user with the new password. If you execute the disk free command you should get a similar output to the one shown in the figure below.
 
 ```shell
-$ df –h
+$ df -h
 ```
 
 > #### Note::Disk Free
@@ -294,6 +294,34 @@ Notice how the disk size has increased and the used disk space percentage has dr
 
 Also notice how the hostname of the device changed (HAL  in this case). Rescanning the subnet should result in systems with all different hostnames.
 
-## Connecting to your Raspberry Pi
 
-[TODO] Hello-injector, SSH, ...
+## RPi Hello Injector
+
+As we are booting several Raspberry Pi's inside the LAB on the same subnet, all DHCP enabled, we cannot identify the different devices. All Pi cases could be labeled with their respective MAC-addresses. However if cases get switched it would be very confusing and error-prone. To solve this, the Rpi-Hello script was developed.
+
+This script will run as a service (daemon) in the background and broadcast UDP packet containing a personalized id string and the IP-adress of the Pi. For your convenience the daemon script can be injected into an image file before it is written to the Pi.
+
+To get the script first clone the github repository with the tools and examples that accompany this course:
+
+```shell
+cd ; git clone https://github.com/BioBoost/embedded_systems_tools_and_scripts.git
+```
+
+Once finished traverse to the subdirectory `embedded_systems_tools_and_scripts/tools/rpi-hello/`. There you will find the README.md file for the rpi-hello injector with instructions on how to use it.
+
+Once finished you can write the new image to an SD-card using Win32Imager or with the following `dd` command:
+
+```shell
+sudo dd if=<path_to_altered_image> of=<path_to_sd_card> bs=1M
+sudo sync
+```
+
+If you are using a virtual machine the command above cannot be used as it is impossible to access the SD-card as a raw device from a virtual machine hosted in VirtualBox. In that case you will need to write the image using the Win32Image application.
+
+Boot the Raspberry Pi and use the following command to capture UDP packets on port 1337:
+
+```shell
+sudo ngrep -d <interface> -i "" udp port 1337 and ip broadcast
+```
+
+Interface is the name of the ethernet interface in linux and it can be found by using the `ifconfig` command. It's the interface that is connected to the wired network. In previous kernel versions the wired ethernet interfaces were named `eth0`, `eth1`, ... However with newer kernel versions the numbering system got a bit more complex and the interfaces get names like `wlp3s0`.
