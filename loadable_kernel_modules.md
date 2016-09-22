@@ -1,1 +1,3 @@
+<!-- toc -->
+
 # Loadable Kernel Modules

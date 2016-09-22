@@ -1,3 +1,5 @@
+<!-- toc -->
+
 # Linux Basics
 
 The Raspberry Pi 2 embedded system is quite a complex system with a lot of features and complicated hardware. While it is possible to write software that run directly on the embedded processor (called a bare-metal application) it is way to complex. Typically an Operating System (OS) is installed to manage all the hardware and resources making it easier for software developers to create application to run on the system. That way the hardware can be accessed through services provided by the OS.

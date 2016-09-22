@@ -1,3 +1,5 @@
+<!-- toc -->
+
 [TODO] Creating hello world, compiling it, makefiles, cross-compilation
 
 # Compiling and Makefiles

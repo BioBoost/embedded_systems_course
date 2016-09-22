@@ -1,3 +1,5 @@
+<!-- toc -->
+
 # Operating Systems
 
 The Raspberry Pi foundation provides several ready to use operating system images for the Pi. At the moment of this writing the following are available:

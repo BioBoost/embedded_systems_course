@@ -1,3 +1,5 @@
+<!-- toc -->
+
 # Compiling the RPi Kernel
 
 There are several reasons why one would want to compile a Linux kernel:
