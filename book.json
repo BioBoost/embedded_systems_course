@@ -7,7 +7,7 @@
     "pluginsConfig": {
         "callouts":
         {
-            "showTypeInHeader": false,
+            "showTypeInHeader": true,
             "assignment": {
                 "alert": "success",
                 "picto": "fa-lightbulb-o"
