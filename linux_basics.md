@@ -562,7 +562,7 @@ $ apt-get remove foo
 * To remove the foo package and its configuration files from your system, run:
 
 ```shell
-$ apt-get --purge remove foo
+$ apt-get purge foo
 ```
 
 * To upgrade all the packages on your system, and, if needed for a package upgrade, installing extra packages or removing packages, run:
