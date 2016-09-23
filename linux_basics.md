@@ -39,7 +39,7 @@ When we are talking about embedded Linux we actually are talking about the same 
 
 The Linux kernel provides the core system facilities required for any system based upon Linux to operate correctly. It has complete control over everything that occurs in the system. Application software relies upon specific features of the Linux kernel such as its handling of hardware devices and its provision of many fundamental abstractions such as virtual memory, sockets, tasks (known as processes), files and many others. A diagram is shown below
 
-[The Linux kernel and it's services](img/kernel_services.png)
+![The Linux kernel and it's services](img/kernel_services.png)
 
 The main roles of the kernel are
 
