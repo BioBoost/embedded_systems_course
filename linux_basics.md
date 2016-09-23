@@ -2,7 +2,7 @@
 
 # Linux Basics
 
-The Raspberry Pi 2 embedded system is quite a complex system with a lot of features and complicated hardware. While it is possible to write software that run directly on the embedded processor (called a bare-metal application) it is way to complex. Typically an Operating System (OS) is installed to manage all the hardware and resources making it easier for software developers to create application to run on the system. That way the hardware can be accessed through services provided by the OS.
+The Raspberry Pi 2 embedded system is quite a complex system with a lot of features and complicated hardware. While it is possible to write software that runs directly on the embedded processor (called a bare-metal application) it is way to complex. Typically an Operating System (OS) is installed to manage all the hardware and resources making it easier for software developers to create application to run on the system. That way the hardware can be accessed through services provided by the OS.
 
 Choosing an operating system for an embedded system mainly depends on the hardware as not each operating system will provide support for the embedded system.
 
@@ -23,13 +23,15 @@ Further down the course we will focus on the Raspbian linux distribution.
 
 ## Linux kernel and Linux Distribution
 
-Linux was originally developed as a free operating system for personal computers based on the Intel x86 architecture, but has since been ported to more computer hardware platforms than any other operating system. This includes desktop PCs, servers, mainframes, supercomputers, smartphones, tablets, TVs, embedded systems, ... Guess what your TV decoder at home is running.
+Linux was originally developed as a free operating system for personal computers based on the Intel x86 architecture, but has since been ported to more computer hardware platforms than any other operating system. This includes desktop PCs, servers, mainframes, supercomputers, smartphones, tablets, TVs, embedded systems, ...
+
+Guess what your TV decoder at home is running.
 
 When people refer to linux, it can actually mean two different things.
 
 First is the Linux kernel which was created in 1991 by a Finnish computer science student called Linus Torvalds. It was based on the Minix operating system. Linus made the project open source and allowed people to freely use and contribute to the Linux kernel. Currently the official kernel received contributions from over 12000 programmers.
 
-Second, are so-called "Linux distributions", also called a distro . They are complete operating systems that consist of the Linux kernel itself and many other applications and software packages. Because they typically contain a lot of software created by the GNU project, some people (mostly GNU guys themselves) claim that they should be called GNU/Linux instead of just Linux.
+Second, are so-called "Linux distributions", also called distros. They are complete operating systems that consist of the Linux kernel itself and many other applications and software packages. Because they typically contain a lot of software created by the GNU project, some people (mostly GNU guys themselves) claim that they should be called GNU/Linux instead of just Linux.
 
 When we are talking about embedded Linux we actually are talking about the same kernel code running on millions of other systems. There is no separate code base for embedded systems. When we however build a Linux system for an embedded target we do exclude features we won't be using. We are also cross-compiling the kernel to binary code that can run on the target system.
 
@@ -38,9 +40,6 @@ When we are talking about embedded Linux we actually are talking about the same 
 The Linux kernel provides the core system facilities required for any system based upon Linux to operate correctly. It has complete control over everything that occurs in the system. Application software relies upon specific features of the Linux kernel such as its handling of hardware devices and its provision of many fundamental abstractions such as virtual memory, sockets, tasks (known as processes), files and many others. A diagram is shown below
 
 [The Linux kernel and it's services](img/kernel_services.png)
-
-
-
 
 The main roles of the kernel are
 

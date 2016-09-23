@@ -90,7 +90,7 @@ Last but not least you should also enable *3D acceleration* which can be found u
 
 Before we can install an operating system on our virtual machine, it is necessary to download an installation image for the Linux distribution we will be using. This image can then be mounted on our VM allowing us to boot from it. In our case we will use Linux Mint 18 (Sarah) - Cinnamon (64-bit), which can be downloaded from [https://www.linuxmint.com/download.php](https://www.linuxmint.com/download.php). Make sure to select the 64-bit Desktop edition. Linux Mint is derivative of Ubuntu, but with a less intrusive graphical desktop environment.
 
-Once downloaded start VirtualBox and open the setting of your VM. Next open the storage settings. Now select the virtual CD/DVD drive below the IDE controller as shown in step 1 in the figure below:
+Once downloaded start VirtualBox and open the settings of your VM. Next open the storage settings. Now select the virtual CD/DVD drive below the IDE controller as shown in step 1 in the figure below:
 
 ![Steps for mounting an image in VirtualBox](img/vm_mount_iso.png)
 
@@ -144,7 +144,10 @@ Create a shared folder on your system and make sure to select the **Auto-mount**
 
 The folder should now be automatically mounted under /media in your VM on your next reboot and should also be available on the Desktop of Linux Mint. However if you try to open the folder you will get a permission error. To fix this it is necessary to add your current user to the group `vboxsf`. You can achieve this by opening up a terminal (`CTRL-ALT-T`) and entering the command below. More on this later.
 
-```shell$ whoami<your_account_name>$ sudo usermod -a -G vboxsf <your_account_name>```
+```shell
+$ whoami<your_account_name>
+$ sudo usermod -a -G vboxsf <your_account_name>
+```
 
 > #### Note::Command Line instructions
 >
@@ -152,11 +155,13 @@ The folder should now be automatically mounted under /media in your VM on your n
 
 Next logout from the current session and log back in. Open up a new terminal and enter the `id` command to get a list of all the groups your user belongs to. `111(vboxsf)` should be one of them.
 
-```shell$ iduid=1000(bioboost) gid=1000(bioboost) groups=1000(bioboost), 4(adm), 24(cdrom), 27(sudo), 30(dip), 46(plugdev), 107(lpadmin), 110(sambashare), 111(vboxsf)```
+```shell
+$ iduid=1000(bioboost) gid=1000(bioboost) groups=1000(bioboost), 4(adm), 24(cdrom), 27(sudo), 30(dip), 46(plugdev), 107(lpadmin), 110(sambashare), 111(vboxsf)
+```
 
 ## Backups and snapshots
 
-It is always a good idea to backup your project files. You can now easily copy them to shared folder and put them on OneDrive, DropBox or a USB stick.
+It is always a good idea to backup your project files. You can now easily copy them to the shared folder and put them on OneDrive, DropBox or a USB stick.
 
 Another good idea is to create periodical snapshots of your virtual machine. This snapshot will contain all the delta's compared to the previous state of the VM. Just select the VM you want to create a snapshot of and hit the **Snapshots** button in the top right corner of VirtualBox. Next click the left icon to create a snapshot. Fill in the name and description as shown in the figure below.
 
