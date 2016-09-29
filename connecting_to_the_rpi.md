@@ -91,3 +91,50 @@ $ chmod 700 ~/.ssh
 The commands above will first set all permissions of the directory and files below as readable and writeable for the user. Next the directory itself is also set traversable by the user.
 
 Now you should be able to login to the Raspberry Pi using your private key and without having to enter a password.
+
+### Using Secure Copy
+
+Secure Copy, or scp, allows files to be copied to, from, or between different hosts. It uses ssh for data transfer and provides the same authentication and same level of security as ssh.
+
+The syntax of the scp command is as follows:
+
+```shell
+scp [[user1@]host1:]<source> [[user2@]host2:]<destination>
+```
+
+#### Examples
+
+Copy the file "foobar" from a remote host to the local host
+
+```shell
+$ scp <username>@<remotehost>:<path_to_foobar> /some/local/directory
+```
+
+Copy the file "foobar" from the local host to a remote host
+
+```shell
+$ scp foobar <username>@<remotehost>:<path_to_remote_dir>
+```
+
+Copy the directory "foo" from the local host to a remote host's directory "bar"
+
+```shell
+$ scp -r foo <username>@<remotehost>:<path_to_remote_dir>
+```
+
+Copy the file "foobar.txt" from remote host "remotehost1" to remote host "remotehost2"
+
+```shell
+$ scp <username1>@<remotehost1>:/some/remote/directory/foobar.txt <username2>@<remotehost2>:/some/remote/directory/
+```
+
+Copying the files "foo.txt" and "bar.txt" from the local host to your home directory on the remote host
+
+```shell
+$ scp foo.txt bar.txt <username>@<remotehost>:~
+```
+
+
+## Using Serial port
+
+[TODO]
