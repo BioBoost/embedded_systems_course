@@ -5,5 +5,6 @@
 * [Linux Basics](linux_basics.md)
 * [Rpi Operating System](rpi_operating_system.md)
 * [Connecting to the RPi](connecting_to_the_rpi.md)
+* [Sources](sources.md)
 * [Bibliography](bibliography.md)
 * [About](about.md)
