@@ -23,7 +23,7 @@ The example above shows how the data in an encrypted connection like SSH is encr
 The first thing we'll do is simply connect to a remote machine. This is accomplished by running `ssh <hostname|ip_address>` on your local machine. The hostname or ip address that you supply as an argument is that of the remote machine that you want to connect to. By default ssh will assume that you want to authenticate as the same user you use on your local machine. To override this and use a different user, simply use `<remoteusername>@<hostname|ip_address>` as the argument. Such as in this example:
 
 ```shell
-ssh pi@10.0.0.35
+$ ssh pi@10.0.0.35
 ```
 
 The first time around it will ask you if you wish to add the remote host to a list of known_hosts, go ahead and say yes.
@@ -38,3 +38,56 @@ If you ever get a warning like this, you should stop and determine if there is a
 After saying yes, it will prompt you for your password on the remote system. If the username that you specified exists and you type in the remote password for it correctly then the system should let you in.
 
 ![Successful SSH Connection](img/ssh_connected.png)
+
+
+### Generating Keys for SSH
+
+Next we need to generate a public and private key-pair.
+
+The reason why you would generate a keyfile is so that you can increase the security of your SSH session by not using your system password. When you generate a key, you are actually generating two key files. One private key and one public key, which is different from the private key. The private key should always stay on your local computer and you should take care not to lose it or let it fall into the wrong hands. Your public key can be put on the machines you want to connect to in a file called .ssh/authorized_keys. The public key is safe to be viewed by anybody and mathematically cannot be used to derive the private key.
+
+Whenever you connect via ssh to a host that has your public key loaded in the authorized_keys file, it will use a challenge response type of authentication which uses your private key and public key to determine if you should be granted access to that computer. It will ask you for your key passphrase though. But this is your local ssh process that is asking for your passphrase, not the ssh server on the remote side. It is asking to authenticate you according to data in your private key. Using key based authentication instead of system password authentication may not seem like much of a gain at first, but there are other benefits that will be explained later.
+
+To generate a public and private key pair enter the following command:
+
+```shell
+$ ssh-keygen -t rsa
+```
+
+It will prompt you for the location of the keyfile. Unless you have already created a keyfile in the default location, you can accept the default by pressing 'enter'.
+
+Next it will ask you for a passphrase and ask you to confirm it. The idea behind what you should use for a passphrase is different from that of a password. Ideally, you should choose something unique and unguessable, just like your password, but it should probably be something much longer, like a whole sentence. However since we won't be sharing our private keys with anyone you can also leave this empty and just hit 'enter'. This will allow us later on to login to the Raspberry Pi without having to enter a password.
+
+The end result should be something similar to the following screen capture:
+
+![SSH Key Pair Generation](img/ssh_key_pair_generation.png)
+
+If you now traverse to the .ssh dir in your home folder and do an `ls` you should see an `id_rsa` file (your private key) and an `id_rsa.pub` file (the public key).
+
+```shell
+$ cd ~/.ssh
+$ ls
+config  id_dsa  id_dsa.pub  known_hosts
+```
+
+
+### Installing the Public Key
+
+Next the public key needs to be saved on the remote divice, the Raspberry Pi in our case. Login to your RPi as you did before using `<remoteusername>@<hostname|ip_address>`. Now traverse to the `.ssh` directory if you already got one, otherwise create one.
+
+```shell
+$ mkdir ~/.ssh && cd ~/.ssh
+```
+
+Now open the `authorized_keys` file using nano. If it is already present we will add our new public key, otherwise it will automatically create a new file. Open your public key file on your development machine (can be accomplished using `cat ~/.ssh/id_rsa.pub`) and copy the content. Paste the content in the `authorized_keys` as a new line and save it (CTRL-O to save and CTRL-X te exit).
+
+If you had to create the directory of the file you will need to restrict the permissions of both. This is because SSH is so secure that it requires your authorized_keys to be only readabe and writeable by the owner of the file. Even the `.ssh` directory cannot be readable or writable by anybody else. To fix this execute the change mode command using the following arguments:
+
+```shell
+$ chmod -R 600 ~/.ssh
+$ chmod 700 ~/.ssh
+```
+
+The commands above will first set all permissions of the directory and files below as readable and writeable for the user. Next the directory itself is also set traversable by the user.
+
+Now you should be able to login to the Raspberry Pi using your private key and without having to enter a password.
