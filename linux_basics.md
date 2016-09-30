@@ -340,15 +340,13 @@ The most used commands to traverse and manipulate the file system of a Linux sys
 
 ## Permissions and Ownership
 
-Based on [Digital Ocean - An Introduction to Linux Permissions](https://www.digitalocean.com/community/tutorials/an-introduction-to-linux-permissions)
-
 Linux is a multi-user OS that is based on the Unix concepts of file ownership and permissions to provide security, at the file system level. It is essential that have a decent understanding of how ownership and permissions work.
 
 ### Linux Users
 
 Linux is a multi-user system. A basic understanding of users and groups is required before ownership and permissions can be discussed, because they are the entities that the ownership and permissions apply to.
 
-In Linux, there are two types of users: system users and regular users. Traditionally, system users are used to run non-interactive or background processes on a system, while regular users are used for logging in and running processes interactively. 
+In Linux, there are two types of users: system users and regular users. Traditionally, system users are used to run non-interactive or background processes on a system, while regular users are used for logging in and running processes interactively.
 
 An easy way to view all of the users on a system is to look at the contents of the "/etc/passwd" file. Each line in this file contains information about a single user, starting with its user name (the name before the first colon). Print the passwd file with the command:
 
@@ -503,6 +501,216 @@ Let's see some examples
 ![Permissions Example](img/permissions_examples.png)
 
 As you may have noticed, the owner of a file usually enjoys the most permissions, when compared to the other two classes. Typically, you will see that the group and other classes only have a subset of the owner's permissions (equivalent or less).
+
+### Changing ownership and permissions
+
+To change the ownership of files and directories the `chown` (Change Owner) and `chgrp` (Change Group) command can be used.
+Permissions can be set using the `chmod` (Change Mode) command line tool.
+
+You are encouraged to follow and try out the examples in the following sections.
+Don't want to break anything ? Then simply create some test files in `/tmp`. They will
+be automatically removed once the system is restarted.
+
+Let's start with setting up a directory to host our files
+```shell
+$ mkdir -p /tmp/embedded_course && cd /tmp/embedded_course
+```
+
+Most examples are using files, however the procedure is exactly the same for a
+directory (remember in Linux almost everything is file).
+
+All examples can also be executed recursively by adding `-R` as an argument. This
+will change the owner, group or mode (according to the issued command) for the given
+directory and all files and other directories inside that specified directory.
+
+#### Changing the owner of a file
+
+The owner of a file or directory can be changed using the `chown` command.
+To get some more information on the command you can use the man pages or execute
+the command with a `--help` argument. This will output the following:
+
+```shell
+$ chown --help
+Usage: chown [OPTION]... [OWNER][:[GROUP]] FILE...
+  or:  chown [OPTION]... --reference=RFILE FILE...
+Change the owner and/or group of each FILE to OWNER and/or GROUP.
+```
+
+First create a simple text file. The owner and group will be set according to the user
+you used to create the file.
+
+```shell
+$ touch helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 09:15 ..
+-rw-r--r--  1 bioboost bioboost    0 Sep 30 09:15 helloworld.txt
+```
+
+Now let us change the owner to daemon
+
+```shell
+$ sudo chown daemon helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 09:17 ..
+-rw-r--r--  1 daemon   bioboost    0 Sep 30 09:15 helloworld.txt
+```
+
+#### Changing the group of a file
+
+The group of a file or directory can also be changed using the `chown` command.
+
+```shell
+$ chown --help
+Usage: chown [OPTION]... [OWNER][:[GROUP]] FILE...
+  or:  chown [OPTION]... --reference=RFILE FILE...
+Change the owner and/or group of each FILE to OWNER and/or GROUP.
+```
+
+The example below shows how the group of a file is changed to `root` using the `chown` command.
+All you need to do is add a colon `:` before the name of the group.
+
+```shell
+$ sudo chown :root helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 09:17 ..
+-rw-r--r--  1 daemon   root        0 Sep 30 09:15 helloworld.txt
+```
+
+The `chown` command can also be used to both change the owner and group with a single
+command.
+
+The following example shows how to give back the ownership (both user and group)
+to the `bioboost` user.
+
+```shell
+$ sudo chown bioboost:bioboost helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 09:17 ..
+-rw-r--r--  1 bioboost bioboost    0 Sep 30 09:15 helloworld.txt
+```
+
+The group of a file or directory can also be changed using the `chgrp` command.
+To get some more information on the command you can use the man pages or execute
+the command with a `--help` argument. This will output the following:
+
+```shell
+$ chgrp --help
+Usage: chgrp [OPTION]... GROUP FILE...
+  or:  chgrp [OPTION]... --reference=RFILE FILE...
+Change the group of each FILE to GROUP.
+```
+
+The example below shows how to set the group to `root` for a specific file.
+
+```shell
+$ sudo chgrp root helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 09:17 ..
+-rw-r--r--  1 bioboost root        0 Sep 30 09:15 helloworld.txt
+```
+
+The following example shows how to give back the ownership (both user and group)
+to the `bioboost` user, and this for the current directory and all files inside it.
+This is accomplished by specifying that the command should do a recursive ownership
+change.
+
+```shell
+$ sudo chown -R bioboost:bioboost .
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 09:17 ..
+-rw-r--r--  1 bioboost bioboost    0 Sep 30 09:15 helloworld.txt
+```
+
+Be careful when using the recursive argument as it can really mess up your day,
+especially in combination with the sudo prefix.
+
+#### Changing permissions
+
+On Linux and other Unix-like operating systems, there is a set of rules for each file which defines who can access that file, and how they can access it. These rules are called file permissions or file modes. The command `chmod` stands for "change mode", and it is used to define the way a file can be accessed.
+
+In general, `chmod` commands take the form:
+
+```shell
+chmod <options> <permissions> <filename>
+```
+
+Permissions defines the permissions for the owner of the file (the "user"), members of the group who own the file (the "group"), and anyone else ("others"). There are two ways to represent these permissions: with symbols (alphanumeric characters), or with octal numbers (the digits 0 through 7).
+
+##### Octal numbers
+
+Here the digits 7, 5, and 4 each individually represent the permissions for the user, group, and others, in that order. Each digit is a combination of the numbers 4, 2, 1, and 0:
+4 stands for "read",
+2 stands for "write",
+1 stands for "execute", and
+0 stands for "no permission."
+
+So continuing with the example file that was created before we could make the file
+readable and writable by the user, readable by the group and inaccessible by others using
+the following command:
+
+```shell
+$ chmod 640 helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 10:17 ..
+-rw-r-----  1 bioboost bioboost    0 Sep 30 09:15 helloworld.txt
+```
+
+##### Symbolic
+
+The letters u, g, and o stand for "user", "group", and "other".
+The equals sign ("=") means "set the permissions exactly like this," and the letters "r", "w", and "x" stand for "read", "write", and "execute", respectively.
+The commas separate the different classes of permissions, and there are no spaces in between them.
+
+The equal sign can also be replaced by a plus sign ("+") or a minus sign ("-"). This respectively adds the permissions or removes permissions for the user, group or others.
+
+Let's make the hello world file readable and writeable by the owner and
+group and readable by everyone:
+
+```shell
+$ chmod u=rw,g=rw,o=r helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 10:17 ..
+-rw-rw-r--  1 bioboost bioboost    0 Sep 30 09:15 helloworld.txt
+```
+
+Next we remove the write permissions for the group and the owner:
+
+```shell
+$ chmod u-w,g-w helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 10:17 ..
+-r--r--r--  1 bioboost bioboost    0 Sep 30 09:15 helloworld.txt
+```
+
+Last the file should be readable and writeable by the user, readable by the group and
+inaccessible by everyone else.
+
+```shell
+$ chmod u+w,o-r helloworld.txt
+$ ls -al
+total 8
+drwxr-xr-x  2 bioboost bioboost 4096 Sep 30 09:15 .
+drwxrwxrwt 15 root     root     4096 Sep 30 10:17 ..
+-rw-r-----  1 bioboost bioboost    0 Sep 30 09:15 helloworld.txt
+```
 
 ## Debian and it's Packages
 
