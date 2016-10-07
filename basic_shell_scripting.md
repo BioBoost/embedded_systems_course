@@ -376,3 +376,10 @@ fi
 >
 > Create a script which copies a directory, including all its files, to the raspberry pi.
 > Do this using the secure shell copy (scp).
+
+-
+
+> #### Assignment::SSH setup
+>
+> Create a script which setups the SSh keys on the pi and also creates keys for the
+> current user if none exist yet. Hint: you can use ssh to execute commands on a remote host.
