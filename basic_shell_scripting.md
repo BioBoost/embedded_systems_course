@@ -363,10 +363,14 @@ fi
 > Create a script that clones the course repositories from Github. Make sure to
 > check if repository already exists and if it does only do a pull.
 
+-
+
 > #### Assignment::Logging in to the pi
 >
 > Create a script which searches the network for your raspberry pi and
 > automatically connects to the pi using ssh.
+
+-
 
 > #### Assignment::Updating a project on the pi
 >
