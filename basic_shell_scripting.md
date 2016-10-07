@@ -173,3 +173,202 @@ My host name is "linuxbox".
 ```
 
 As you can see, using the `\"` sequence allows us to embed double quotes into our text.
+
+## Flow control
+
+### Making decision
+
+When writing scripts there will always come a time when it is necessary to define a different path based on a certain condition.
+
+Some examples:
+
+* Only execute some commands if a file exists
+* Make a log entry if something fails
+* Check user input data for validity
+* ...
+
+To add such decisions to our scripts we will require constructs that allow us to test for conditions. The if statement is one of those constructs. It's syntax is the following:
+
+```bash
+if condition; then
+  # Do something
+elif condition; then
+  # Do another thing
+else
+  # Do something else
+fi
+```
+
+The condition is a bit different from the conditions we know from programming languages such as C++ or PHP.
+
+#### Exit status
+
+A first option for the condition can be the exit status of a command. Each command or
+program that is executed will end with a status code between 0 and 255 (can be negative on windows).
+By convention, the value 0 means that everything went fine, while an exit status different from 0 means
+that something went wrong.
+
+You can actually output the return values of Linux system commands such as ls and all by
+echoing `$?` on the command line. Try the following example:
+
+```shell
+$ ls /usr/bin
+$ echo $?
+0
+```
+
+The status of 0 indicates all went well.
+
+Now try:
+
+```shell
+$ ls /does_not_exist
+ls: cannot access 'does_not_exist': No such file or directory
+$ echo $?
+2
+```
+
+The status is not zero, indicating that the `ls` command did not terminate properly or something went wrong.
+
+Putting it all together you can build an if statement based on the output of a command.
+Let's see an example where we try to create a file in a directory we don't have access too.
+Next we try to create a file in the `/tmp` dir where everyone has access:
+
+```bash
+#!/usr/bin/env bash
+
+if touch /usr/bin/hello; then
+    echo "Created hello in bin"
+else
+    echo "Failed to create hello in bin."
+fi
+
+if touch /tmp/hello; then
+    echo "Created hello in tmp"
+else
+    echo "Failed to create hello in tmp."
+fi
+```
+
+This construct is less used but can sometimes be helpful.
+
+#### Testing
+
+The test condition is most often used for the if statement. While there are two
+syntactically different form, both work exactly the same.
+
+```bash
+#!/usr/bin/env bash
+
+if test expression; then
+    # Do something
+else
+    # Do another thing
+fi
+```
+The second form, which is used more often is shown below:
+
+```bash
+#!/usr/bin/env bash
+
+if [ expression ] then
+    # Do something
+else
+    # Do another thing
+fi
+```
+
+Bash features a lot of built-in checks and comparisons, coming in quite handy in many situations.
+
+String comparisons:
+
+| Expression | Description |
+| ---------- | ----------- |
+| str1 = str2 | Returns true if the strings are equal |
+| str1 != str2 | Returns true if the strings are NOT equal |
+| -z str | Returns true if the string is empty |
+| -n str | Returns true if the string is NOT empty |
+
+Always make sure to add double quotes around the string and string variable.
+
+Numeric comparisons
+
+| Expression | Description |
+| ---------- | ----------- |
+| expr1 -eq expr2 | Returns true if the expressions are equal |
+| expr1 -ne expr2 | Returns true if the expressions are not equal |
+| expr1 -gt expr2 | Returns true if expr1 is greater than expr2 |
+| expr1 -ge expr2 | Returns true if expr1 is greater than or equal to expr2 |
+| expr1 -lt expr2 | Returns true if expr1 is less than expr2 |
+| expr1 -le expr2 | Returns true if expr1 is less than or equal to expr2 |
+| ! expr1 | Negates the result of the expression |
+
+Some file conditionals:
+
+| Expression | Description |
+| ---------- | ----------- |
+| -d <directory> | Returns true if the directory exists |
+| -f <file> | Returns true if the file exists |
+| -r <file> | Returns true if the file is readable by the user running the script |
+| -w <file> | Returns true if the file is writeable by the user running the script |
+| -x <file> | Returns true if the file is executable by the user running the script |
+
+
+Let's rewrite the small script mentioned in the previous section that checks the status
+of the touch command:
+
+```bash
+#!/usr/bin/env bash
+
+touch /usr/bin/hello;
+
+if [ $? -eq 0 ]; then
+    echo "Created hello in bin"
+else
+    echo "Failed to create hello in bin."
+fi
+
+touch /tmp/hello;
+
+if [ $? -eq 0 ]; then
+    echo "Created hello in tmp"
+else
+    echo "Failed to create hello in tmp."
+fi
+```
+
+If something fails in your script or it should be prematurely ended then you can
+always make use of the exit command. By providing a numeric argument (0 to 255) you can
+set the exit code of your script.
+
+Example:
+
+```bash
+#!/usr/bin/env bash
+
+userid=$(id -u)
+
+if [ "$userid" = "0" ]; then
+    echo "Running script as root"
+else
+    echo "You must be superuser to run this script"
+    exit 1
+fi
+```
+
+## Assignments
+
+> #### Assignment::Cloning course repositories
+>
+> Create a script that clones the course repositories from Github. Make sure to
+> check if repository already exists and if it does only do a pull.
+
+> #### Assignment::Logging in to the pi
+>
+> Create a script which searches the network for your raspberry pi and
+> automatically connects to the pi using ssh.
+
+> #### Assignment::Updating a project on the pi
+>
+> Create a script which copies a directory, including all its files, to the raspberry pi.
+> Do this using the secure shell copy (scp).

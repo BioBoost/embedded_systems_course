@@ -14,3 +14,6 @@ https://github.com/BioBoost/embedded_systems_tools_and_scripts
 
 For the more advanced users, dotfiles are available here as a student branch from my own:
 https://github.com/BioBoost/dotfiles/tree/student
+
+Conditions in bash scripting
+https://linuxacademy.com/blog/linux/conditions-in-bash-scripting-if-statements/
