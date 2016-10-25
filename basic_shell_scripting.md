@@ -271,7 +271,7 @@ The second form, which is used more often is shown below:
 ```bash
 #!/usr/bin/env bash
 
-if [ expression ] then
+if [ expression ]; then
     # Do something
 else
     # Do another thing
