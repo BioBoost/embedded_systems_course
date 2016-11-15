@@ -1,7 +1,5 @@
 <!-- toc -->
 
-[TODO] Creating hello world, compiling it, makefiles, cross-compilation
-
 # Compiling and Makefiles
 
 Writing programs can be a fun thing to do. By expressing ourselfes in a high-level language we can actually tell a computer or embedded system, which only understands low-level binary, what to do. This high-level language does have to be translated to binary processor instructions specific for the architecture we are going to run the program on. This is a job for compilers and interpreters.
@@ -296,7 +294,36 @@ clean:
 
 ### A More Complex Hello World Example
 
-[TODO] We hadden hier normaal een voorbeeld met een class robot ofzoiets
+Now what if your project contained more files than just a simple main.cpp file. This will be the case for most projects.
+
+The makefile below shows how separate classes can be compiled using a makefile.
+
+```make
+# The compiler to use
+CC=g++
+
+# Compiler flags
+CFLAGS=-c -Wall
+	# -c: Compile or assemble the source files, but do not link. The linking stage simply is not done. The ultimate output is in the form of an object file for each source file.
+	# -Wall: This enables all the warnings about constructions that some users consider questionable, and that are easy to avoid (or modify to prevent the warning), even in conjunction with macros.
+
+# Name of executable output
+EXECUTABLE=hello
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): main.o robot.o
+	$(CC) main.o robot.o -o $(EXECUTABLE)
+
+main.o: main.cpp
+	$(CC) $(CFLAGS) main.cpp
+
+robot.o: lib/robot.cpp
+	$(CC) $(CFLAGS) lib/robot.cpp
+
+clean:
+	rm -f *.o $(EXECUTABLE)
+```
 
 ## Cross-compiling for Raspberry Pi
 

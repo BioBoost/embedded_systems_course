@@ -62,6 +62,8 @@ This will take a few minutes after which a directory `rpi-linux` should have bee
 
 ### Cross-compiler
 
+[NOTE] This is already part of the compiling_makefiles.md chapter.
+
 Next we need to setup the cross-compiler so we can use our development machine to build programs for an ARM architecture.
 
 Luckely a cross-compiler is readily available. All we need to do is clone it.
@@ -81,7 +83,7 @@ export CCPREFIX=/home/<username>/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnue
 
 Make sure not to make any typo's and use tab-completion !
 
-On the other hand to you can also create a small script to this for you. First create a shell script. Add a shebang and the export command to it using nano. 
+On the other hand to you can also create a small script to this for you. First create a shell script. Add a shebang and the export command to it using nano.
 
 ```shell
 cd && nano setup_cross_compiler.sh

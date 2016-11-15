@@ -121,3 +121,15 @@ Loadable kernel modules
 * Neopixel module with external mbed
 
 Is this feasible ? Maybe this might be too much.
+
+
+
+## Difference && and ;
+
+In the shell, && and ; are similar in that they both can be used to terminate commands. The difference is && is also a conditional operator. With ; the following command is always executed, but with && the later command is only executed if the first succeeds.
+
+false; echo "yes"   # prints "yes"
+true; echo "yes"    # prints "yes"
+false && echo "yes" # does not echo
+true && echo "yes"  # prints "yes"
+Newlines are interchangeable with ; when terminating commands.
