@@ -4,9 +4,9 @@
 
 # Compiling and Makefiles
 
-Writing programs can be a fun thing to do. By expressing ourselfes in a high-level language we can actually tell a computer or embedded system, which only understands low-level binary, what to do. This high-level language does have to be translated to the binary language. This is a job for compilers and interpreters.
+Writing programs can be a fun thing to do. By expressing ourselfes in a high-level language we can actually tell a computer or embedded system, which only understands low-level binary, what to do. This high-level language does have to be translated to binary processor instructions specific for the architecture we are going to run the program on. This is a job for compilers and interpreters.
 
-Compiling source code (the high-level language) can be a very complex job, especially when your project starts to become big and complex. Modern IDE (Integrated Development Environments) such as Visual Studio and Eclipse have spoiled us a bit on this matter. However in the Embedded Linux world you do not always have these tools at your disposal. This is where makefiles can make our lifes a little easier. Makefiles are textual files that tell a compiler how the source code has to build into an executable program.
+Compiling source code (the high-level language) can be a very complex job, especially when your project starts to become big and complex. Modern IDE (Integrated Development Environments) such as Visual Studio and Eclipse have spoiled us a bit on this matter. However in the Embedded Linux world you do not always have these tools at your disposal. This is where makefiles can make our lifes a little easier. Makefiles are textual files that tell a compiler how the source code has to be build into an executable program.
 
 While makefiles can be as complex as the projects they build, they are often generated or build step by step. In this course a brief introduction in makefiles is given.
 
@@ -101,7 +101,7 @@ The main differences:
 * gcc compiling C files has less predefined macros.
 * gcc compiling .cpp and g++ compiling .c/.cpp files has a few extra macros.
 
-g++ is equivalent to `gcc -xc++ -lstdc++ -shared-libgcc` (the 1st is a compiler option, the 2nd two are linker options). 
+g++ is equivalent to `gcc -xc++ -lstdc++ -shared-libgcc` (the 1st is a compiler option, the 2nd two are linker options).
 
 ### Compiling Hello World
 
@@ -296,20 +296,194 @@ clean:
 
 ### A More Complex Hello World Example
 
-
-
-
-
-
-
+[TODO] We hadden hier normaal een voorbeeld met een class robot ofzoiets
 
 ## Cross-compiling for Raspberry Pi
 
-### What is Cross-compilation
+A compiler is a program that turns source code into executable code. Like all programs, a compiler runs on a specific type of computer, and the new programs it outputs also run on a specific type of computer. The computer the compiler runs on is called **the host**, and the computer the new programs run on is called **the target**. When the host and target are the same type of machine, the compiler is a **native compiler**. When the host and target are different, the compiler is a **cross compiler**.
 
-### Setup of environment
+When developing for the same architecture as used for the development, the software can easily be compiled on the development machine and provided as a binary to anyone who wants to use your application.
 
-### Creating a Makefile
+Embedded systems often have a different architecture than the development machine (PowerPC, ARM, ...). While you can definitely develop your application on an x86 machine and copy it to an embedded system for compilation it is most often not preferred. This because the work flow requires extra steps and it may also be slow if the target system is not adequate for the compilation process. The application may also be complex being the reason for the compilation to take a long time (try for example to compile apache2 webserver on a Raspberry Pi).
+
+In some cases the application is tested and debugged on the development architecture and later compiled for the target architecture. This can greatly decrease testing and debugging time.
+
+The solution lies in a cross-compiler.
+
+### Why cross-compile?
+
+In theory, a PC user who wanted to build programs for some device could get the appropriate target hardware (or emulator), boot a Linux distro on that, and compile natively within that environment. While this is a valid approach, it has a few prominent downsides for embedded systems:
+
+* **Speed** - Target platforms are usually much slower than hosts, by an order of magnitude or more. Most special-purpose embedded hardware is designed for low cost and low power consumption, not high performance.
+* **Capability** - Compiling is very resource-intensive. The target platform usually doesn't have gigabytes of memory and hundreds of gigabytes of disk space the way a desktop does; it may not even have the resources to build "hello world", let alone large and complicated packages.
+* **Availability** - Bringing Linux up on a hardware platform it's never run on before requires a cross-compiler. Even on long-established platforms like ARM or Mips, finding an up-to-date full-featured prebuilt native environment for a given target can be hard. If the platform in question isn't normally used as a development workstation, there may not be a recent prebuilt distro readily available for it, and if there is it's probably out of date. If you have to build your own distro for the target before you can build on the target, you're back to cross-compiling anyway.
+* **Flexibility** - A fully capable Linux distribution consists of hundreds of packages, but a cross-compile environment can depend on the host's existing distro for most things. Cross compiling focuses on building the target packages to be deployed, not spending time getting build-only prerequisites working on the target system.
+* **Convenience** - The user interface of headless boxes tends to be a bit basic. Diagnosing build breaks are frustrating enough as it is. Switching back and forth between your test environment and your development environment gets old fast.
+
+### Setting up the Cross-compiler for ARM
+
+Let us setup a cross-compiler so we can use our development machine to build programs for an ARM architecture.
+
+Luckely a cross-compiler is readily available. All we need to do is clone the `rpi-tools` repository to get it.
+
+```shell
+cd && git clone --depth 1 https://github.com/raspberrypi/tools.git rpi-tools
+```
+
+This will clone the required tools in your home directory.
+
+Now if we want to cross-compile something we will need to provide the path to the cross-compiler. If you are manually compiling files you can just specify the full path to the compiler but this is a bit tedious.
+
+Since we are already using makefiles, we will take this approach. There are actually two basic ways to specify the compiler, compared to a more complex and general system using target-specific makefiles or using configure (more info at [http://stackoverflow.com/questions/3090224/how-to-instruct-makefile-to-use-different-compilers](http://stackoverflow.com/questions/3090224/how-to-instruct-makefile-to-use-different-compilers)).
+
+A first approach consists of making two makefiles. One for the native compiler and one for cross-compiler.
+
+A native makefile
+
+```make
+# The compiler to use
+CC=g++
+
+# Compiler flags
+CFLAGS=-c -Wall
+	# -c: Compile or assemble the source files, but do not link. The linking stage simply is not done. The ultimate output is in the form of an object file for each source file.
+	# -Wall: This enables all the warnings about constructions that some users consider questionable, and that are easy to avoid (or modify to prevent the warning), even in conjunction with macros.
+
+# Name of executable output
+EXECUTABLE=hello
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): main.o
+	$(CC) main.o -o $(EXECUTABLE)
+
+main.o: main.cpp
+	$(CC) $(CFLAGS) main.cpp
+
+clean:
+	rm -f *.o $(EXECUTABLE)
+```
+
+A cross-compilation makefile
+
+```make
+# The compiler to use
+CCPREFIX="/home/$(whoami)/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
+CC=$(CCPREFIX)g++
+
+# Compiler flags
+CFLAGS=-c -Wall
+	# -c: Compile or assemble the source files, but do not link. The linking stage simply is not done. The ultimate output is in the form of an object file for each source file.
+	# -Wall: This enables all the warnings about constructions that some users consider questionable, and that are easy to avoid (or modify to prevent the warning), even in conjunction with macros.
+
+# Name of executable output
+EXECUTABLE=hello
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): main.o
+	$(CC) main.o -o $(EXECUTABLE)
+
+main.o: main.cpp
+	$(CC) $(CFLAGS) main.cpp
+
+clean:
+	rm -f *.o $(EXECUTABLE)
+```
+
+However a better approach would be to make a generic makefile that uses an exported variable `CCPREFIX` which can be set from outside of the makefile.
+
+You can try to do it manually inside a terminal by exporting the path to the compiler. Do take note that if you close the terminal the path will be forgotten. So you will need to redo the export. Also do not forget to substitute `<username>` with the username of your account on your development machine.
+
+```shell
+export CCPREFIX="/home/$(whoami)/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
+```
+
+Make sure not to make any typo's and use tab-completion !
+
+On the other hand to you can also create a small script to this for you. First create a shell script. Add a shebang and the export command to it using nano.
+
+```shell
+cd && nano setup_cross_compiler.sh
+```
+
+Add the following:
+
+```shell
+#!/usr/bin/env bash
+export CCPREFIX="/home/$(whoami)/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
+```
+
+Save the script, make it executable and run it. Do take note that you need to use the `source` command to run the script otherwise it will be run in another shell and the export will be lost.
+
+```shell
+chmod u+x setup_cross_compiler.sh
+source ./setup_cross_compiler.sh
+```
+
+> ####Warning "Closing the terminal"
+>
+> Again note that if you close the terminal, the export will also be lost.
+
+Make sure to check if all went well by echoing: `echo $CCPREFIX`. You should get the following result:
+
+```shell
+echo $CCPREFIX
+/home/bioboost/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-
+```
+
+Don't want to do this every time ? Then add the following lines to the bottom of `~/.zshrc` or `./bashrc` to make the export on every login or shell launch:
+
+```shell
+# Cross-compiler for RPI
+export CCPREFIX="$HOME/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
+```
+
+Now your general makefile can be the following
+
+```make
+# The compiler to use
+CC=$(CCPREFIX)g++
+
+# Compiler flags
+CFLAGS=-c -Wall
+	# -c: Compile or assemble the source files, but do not link. The linking stage simply is not done. The ultimate output is in the form of an object file for each source file.
+	# -Wall: This enables all the warnings about constructions that some users consider questionable, and that are easy to avoid (or modify to prevent the warning), even in conjunction with macros.
+
+# Name of executable output
+EXECUTABLE=hello
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): main.o
+	$(CC) main.o -o $(EXECUTABLE)
+
+main.o: main.cpp
+	$(CC) $(CFLAGS) main.cpp
+
+clean:
+	rm -f *.o $(EXECUTABLE)
+```
+
+Do note that this way you will need to override the export off `CCPFREFIX` if you want to use the native compiler:
+
+```shell
+export CCPREFIX=""
+```
+
+Now you are ready to make the *hello* application, copy the output binary to the embedded system and run it. If all went well.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Embedded Systems Compilers
