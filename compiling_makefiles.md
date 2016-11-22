@@ -498,6 +498,16 @@ Do note that this way you will need to override the export off `CCPFREFIX` if yo
 export CCPREFIX=""
 ```
 
+#### Using an alias
+
+Using an alias the above method can be simplified even more. By creating the following alias we can instead of `make` execute a `pimake` command which first sets the `CCPREFIX` and then calls make.
+
+```shell
+alias pimake='CCPREFIX="$HOME/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-" make'
+```
+
+To crosscompile you can execute `pimake` and `pimake clean` to cleanup. Want to compile for the native system just execute `make`.
+
 Now you are ready to make the *hello* application, copy the output binary to the embedded system and run it. If all went well.
 
 
