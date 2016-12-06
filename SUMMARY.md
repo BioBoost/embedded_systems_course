@@ -7,8 +7,8 @@
 * [Connecting to the RPi](connecting_to_the_rpi.md)
 * [Basic Shell Scripting](basic_shell_scripting.md)
 * [Compiling and Makefiles](compiling_makefiles.md)
-* [The Linux Kernel](the_linux_kernel.md)
-* [Loadable Kernel Modules](loadable_kernel_modules.md)
+<!-- * [The Linux Kernel](the_linux_kernel.md) -->
+<!-- * [Loadable Kernel Modules](loadable_kernel_modules.md) -->
 * [Sources](sources.md)
 * [Bibliography](bibliography.md)
 * [About](about.md)
