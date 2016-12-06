@@ -2,6 +2,22 @@
 
 This walkthrough will guide you through the TouchBerry Thumper setup.
 
+### General idea
+
+The Thumper can be controlled using it's RESTfull web interface that is hosted
+on port 3000. The API can be found at [https://github.com/BioBoost/node_thumper_control](https://github.com/BioBoost/node_thumper_control).
+
+The student have a Raspberry Pi 2 and a TouchBerry shield at their disposal (with Qt1070 touch sensor and some touch pads).
+The status of the TouchBerry shield should be read from the Qt1070 chip using I2c by the use of a C++ master application. This application
+should write its findings to a file `/tmp/touch` under the form of instructions such as 'forward', 'left', ...
+
+The instructions are than detected by a Ruby script which sends them to the Thumper RESTfull API.
+
+However since the Raspberry Pi's of the students don't have WiFi dongles a local device will need to act as a proxy forwarding commands
+and replies between the Pi's and the Thumper.
+
+### Setup
+
 As a teacher you should make sure to boot the Thumper first things first.
 Next use a local machine (laptop for example) to connect both to the local network
 and to the WiFi access point of the Thumper. Launch the NodeJs Touchberry Thumper Proxy
@@ -83,3 +99,137 @@ The proxy script should also indicate a successful forward.
 
 The following sections will provide the necessary information for you to create the
 C++ TouchBerry i2c master application and Ruby script that sends the REST requests based on the commands received from the C++ application.
+
+##### The Ruby REST script
+
+A device in linux is most often accessed through a file such as '/dev/i2c-1' or '/dev/ttyACM0'. We would like to follow the
+same road with the TouchBerry application. Meaning we want the state of the TouchBerry to be accessed through a simple file.
+
+Let's assume that we can read the state of the shield by reading from a file `/tmp/touch`. This file could contain the following states:
+
+* left
+* right
+* forward
+* reverse
+* stop
+* a
+* b
+* x
+
+Where stop is the state when no key is pressed on the board.
+
+An example script to start from is given below. This script is able to detect the changes of the `/tmp/touch` file and
+send a REST request to a given host (this should be the laptop of the teacher).
+
+```ruby
+#!/usr/bin/env ruby
+
+require 'listen'
+require 'net/http'
+require 'json'
+
+class ThumperRestInterface
+
+	@@DRIVE_SPEED = 70
+	@@ID = 'mark'
+
+	def initialize host='http://localhost:3000'
+		@host = host
+	end
+
+	def strobe
+		uri = URI(@host + '/neopixels/effects/strobe/0')
+		req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+		req.body = {red: 0, green: 240, blue: 0, delay: 50, id: @@ID }.to_json
+		send_request uri, req
+	end
+
+	def dim
+		uri = URI(@host + '/neopixels/strings/0')
+		req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+		req.body = {red: 0, green: 0, blue: 0, id: @@ID }.to_json
+		send_request uri, req
+	end
+
+	def left
+		drive @@DRIVE_SPEED, -@@DRIVE_SPEED
+	end
+
+	def right
+		drive -@@DRIVE_SPEED, @@DRIVE_SPEED
+	end
+
+	def forward
+		drive @@DRIVE_SPEED, @@DRIVE_SPEED
+	end
+
+	def reverse
+		drive -@@DRIVE_SPEED, -@@DRIVE_SPEED
+	end
+
+	def stop
+		drive 0, 0
+	end
+
+	def drive leftspeed, rightspeed
+		uri = URI(@host + '/speed')
+		req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+		req.body = {left_speed: leftspeed, right_speed: rightspeed, id: @@ID }.to_json
+		send_request uri, req
+	end
+
+	def send_request uri, req
+		res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+			http.request(req)
+		end
+	end
+end
+
+thumper = ThumperRestInterface.new
+
+listener = Listen.to('/tmp/touch') do |modified|
+  puts "modified absolute path: #{modified}"
+	File.readlines(modified.first).each do |instruction|
+		instruction.strip!
+
+		if thumper.respond_to?(instruction.to_sym)
+			thumper.send instruction
+		else
+			thumper.stop
+		end
+
+	end
+end
+listener.start # not blocking
+
+sleep
+```
+
+The full script with README can be found at [https://github.com/BioBoost/touchberry_thumper_ruby_commander](https://github.com/BioBoost/touchberry_thumper_ruby_commander)
+
+While the script needs to run on your Raspberry Pi, you can however clone it to your development machine first to change it and later secure copy it to the Pi.
+
+While the script is pretty straight forward, the following block of code does require some
+extra attention:
+
+```ruby
+if thumper.respond_to?(instruction.to_sym)
+  thumper.send instruction
+else
+  thumper.stop
+end
+```
+
+The code above will take the line read from the file after being stripped (whitespace is removed)
+and check if the `ThumperRestInterface` class has a method with the name of the instruction from the file.
+If it does, it will call it. Otherwise it will stop the Thumper as a precaution.
+
+So this means that if you want to implement new instructions you simply need to add a method with that
+name to the `ThumperRestInterface` class and make your C++ application output that instruction to the file.
+
+Also make sure to change the ID from 'mark' to something personal. That will sure that each request is
+personalized and easily identifiable in the proxy logs.
+
+##### The TouchBerry I2C master application
+
+Solution for the teacher to this can be found @ [https://github.com/BioBoost/embedded_systems_course_solutions/tree/master/i2c_qt1070_master_pi](https://github.com/BioBoost/embedded_systems_course_solutions/tree/master/i2c_qt1070_master_pi)
