@@ -12,3 +12,7 @@
 * [Sources](sources.md)
 * [Bibliography](bibliography.md)
 * [About](about.md)
+
+### Walkthroughs
+
+* [Touchberry Thumper](walkthroughs/touchberry_thumper.md)
