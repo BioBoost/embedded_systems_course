@@ -428,45 +428,15 @@ export CCPREFIX="/home/$(whoami)/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnue
 
 Make sure not to make any typo's and use tab-completion !
 
-On the other hand to you can also create a small script to this for you. First create a shell script. Add a shebang and the export command to it using nano.
+#### Using an alias
+
+A much better approach makes use of aliases. By creating the following alias we can easily crosscompile a program using a single command. Let's first create the alias by opening `~/.zshrc` or `./bashrc` depending on the shell you use. Add the following to the bottom of the file and save it.
 
 ```shell
-cd && nano setup_cross_compiler.sh
+alias pimake='ARCH=arm CCPREFIX="$HOME/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-" CROSS_COMPILE=$CCPREFIX make'
 ```
 
-Add the following:
-
-```shell
-#!/usr/bin/env bash
-export CCPREFIX="/home/$(whoami)/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
-```
-
-Save the script, make it executable and run it. Do take note that you need to use the `source` command to run the script otherwise it will be run in another shell and the export will be lost.
-
-```shell
-chmod u+x setup_cross_compiler.sh
-source ./setup_cross_compiler.sh
-```
-
-> ####Warning "Closing the terminal"
->
-> Again note that if you close the terminal, the export will also be lost.
-
-Make sure to check if all went well by echoing: `echo $CCPREFIX`. You should get the following result:
-
-```shell
-echo $CCPREFIX
-/home/bioboost/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-
-```
-
-Don't want to do this every time ? Then add the following lines to the bottom of `~/.zshrc` or `./bashrc` to make the export on every login or shell launch:
-
-```shell
-# Cross-compiler for RPI
-export CCPREFIX="$HOME/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
-```
-
-Now your general makefile can be the following
+Now by making sure that each makefile has `CC` using the `$(CCPREFIX)` prefix.
 
 ```make
 # The compiler to use
@@ -492,38 +462,11 @@ clean:
 	rm -f *.o $(EXECUTABLE)
 ```
 
-Do note that this way you will need to override the export off `CCPFREFIX` if you want to use the native compiler:
-
-```shell
-export CCPREFIX=""
-```
-
-#### Using an alias
-
-Using an alias the above method can be simplified even more. By creating the following alias we can instead of `make` execute a `pimake` command which first sets the `CCPREFIX` and then calls make.
-
-```shell
-alias pimake='CCPREFIX="$HOME/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-" make'
-```
-
-To crosscompile you can execute `pimake` and `pimake clean` to cleanup. Want to compile for the native system just execute `make`.
-
-Now you are ready to make the *hello* application, copy the output binary to the embedded system and run it. If all went well.
-
-
-
-
-
-
-
-
-
-
-
-
-
+To crosscompile you can simply issue the `pimake` command. You can even pass the same arguments as with make. For example `pimake clean`. Want to compile for the native system just execute `make`.
 
 ### Embedded Systems Compilers
+
+[TODO] Add more info
 
 But wait, how do you build a compiler if you do not have a compiler?
 
