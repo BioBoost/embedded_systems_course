@@ -9,7 +9,7 @@ on port 3000. The API can be found at [https://github.com/BioBoost/node_thumper_
 
 The student have a Raspberry Pi 2 and a TouchBerry shield at their disposal (with Qt1070 touch sensor and some touch pads).
 The status of the TouchBerry shield should be read from the Qt1070 chip using I2c by the use of a C++ master application. This application
-should write its findings to a file `/tmp/touch` under the form of instructions such as 'forward', 'left', ...
+should write its findings to a file in the directory `/tmp/touch` under the form of instructions such as 'forward', 'left', ...
 
 The instructions are than detected by a Ruby script which sends them to the Thumper RESTfull API.
 
@@ -105,7 +105,7 @@ C++ TouchBerry i2c master application and Ruby script that sends the REST reques
 A device in linux is most often accessed through a file such as '/dev/i2c-1' or '/dev/ttyACM0'. We would like to follow the
 same road with the TouchBerry application. Meaning we want the state of the TouchBerry to be accessed through a simple file.
 
-Let's assume that we can read the state of the shield by reading from a file `/tmp/touch`. This file could contain the following states:
+Let's assume that we can read the state of the shield by reading from a file inside the `/tmp/touch` directory. This file could contain the following states:
 
 * left
 * right
@@ -118,8 +118,7 @@ Let's assume that we can read the state of the shield by reading from a file `/t
 
 Where stop is the state when no key is pressed on the board.
 
-An example script to start from is given below. This script is able to detect the changes of the `/tmp/touch` file and
-send a REST request to a given host (this should be the laptop of the teacher).
+An example script to start from is given below. This script is able to detect the changes of the files inside a `/tmp/touch` directory (create for example a file called `thumper` inside this directory) and send a REST request to a given host (this should be the laptop of the teacher).
 
 ```ruby
 #!/usr/bin/env ruby
@@ -230,6 +229,27 @@ name to the `ThumperRestInterface` class and make your C++ application output th
 Also make sure to change the ID from 'mark' to something personal. That will sure that each request is
 personalized and easily identifiable in the proxy logs.
 
+To test this script you should first create the directory `/tmp/touch`. Touch a file inside it, for example `thumper`. Next run the Ruby script using `./thumper_touch.rb` (after doing a `bundle install`). Now if you execute the following command the lights of the Thumper should strobe:
+
+```shell
+echo "strobe" > /tmp/touch/thumper
+```
+
+or dim using
+
+```shell
+echo "dim" > /tmp/touch/thumper
+```
+
 ##### The TouchBerry I2C master application
 
 Solution for the teacher to this can be found @ [https://github.com/BioBoost/embedded_systems_course_solutions/tree/master/i2c_qt1070_master_pi](https://github.com/BioBoost/embedded_systems_course_solutions/tree/master/i2c_qt1070_master_pi)
+
+This application should already be working from the previous lab sessions.
+
+However now you will need to add the functionality to write the given state of the TouchBerry
+to a file inside the `/tmp/touch` directory. If that works, you should be able to command the Thumper.
+
+### Final notes
+
+Good Luck !
