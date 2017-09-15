@@ -12,15 +12,19 @@ Several software packages are available to create and run virtual machines. Exam
 
 ## Installing Virtual Box
 
-Start by going to the download section of the website of VirtualBox ([https://www.virtualbox.org](https://www.virtualbox.org)). Download the VirtualBox platform package for your system. At the moment of this writing the current version of VirtualBox is 5.0.20. When running the installer package make sure to install VirtualBox with all features enabled as shown in the figure below.
+Start by going to the download section of the website of VirtualBox ([https://www.virtualbox.org](https://www.virtualbox.org)). Download the VirtualBox platform package for your system. At the moment of this writing the current version of VirtualBox is 5.1.28. When running the installer package make sure to install VirtualBox with all features enabled as shown in the figure below.
 
 ![Installing VirtualBox with all features enabled](img/virtual_box_install.png)
 
-It is also necessary to install the extension pack which introduces USB2.0 and USB3.0 support and some other extra features. You can download the extension pack on the same page as you downloaded the installer for VirtualBox. Just make sure to pick the correct version for your current VirtualBox version.
+It is also necessary to install the extension pack which introduces USB2.0 and USB3.0 support and some other extra features. You can download the extension pack on the same page as you downloaded the installer for VirtualBox. Just make sure to pick the correct version for your current VirtualBox version. To install the extension pack just open the file by double clicking it.
 
-The installer of VirtualBox should also have created a virtual network adapter (such as can be seen in the figure below) which is used for private networking between the host machine and the virtual machine.
+The installer of VirtualBox should also have created virtual network adapters (such as can be seen in the figure below) which are used for private networking between the host machine and the virtual machine.
 
 ![VirtualBox virtual network adapters](img/virtual_box_network_adapters.png)
+
+> #### Alert::Virtual Box Network Adapters
+>
+> In some cases these network adapters may interfere with the correct working of your physical network. For example for LAN-games that use UDP broadcasting to discover each other. In this case you can just disable the adapters. Make sure to re-enable them before using VirtualBox.
 
 Once finished you can start the VirtualBox client and you should get the interface shown in the figure below:
 
@@ -34,11 +38,11 @@ Under `Files => Preferences => Language` you can also change the default interfa
 
 Creating a virtual machine is very simple as it is just following the steps presented to you by the wizard. To start the process of creating a VM hit the *New* button on the main interface of VirtualBox.
 
-The first step consist of giving your VM a name and selecting the operating system you will be running on the VM as shown in the figure below. In our case we will use Linux Mint 18 (Sarah) - Cinnamon (64-bit). More on this later.
+The first step consist of giving your VM a name and selecting the operating system you will be running on the VM as shown in the figure below. In our case we will use Linux Mint 18 (Sarah) - Cinnamon (64-bit). Select **Linux** as type and **Ubuntu (64-bit)** as version.
 
 ![Creating a VM - The name and OS](img/vm_new.png)
 
-Next we need to select the amount of memory we want to assign to the virtual machine. The recommended amount is 512MB. However if you have more than 4GB, select 1024MB or even 2048MB, which will improve the responsiveness and performance of the VM.
+Next we need to select the amount of memory we want to assign to the virtual machine. The recommended amount is 1024MB. However if you have more than 4GB, select 2048MB, which will improve the responsiveness and performance of the VM.
 
 ![Creating a VM - Amount of memory](img/vm_memory.png)
 
@@ -50,11 +54,11 @@ The first screen will allow us to select what type of virtual drive file we want
 
 ![Creating a VM - Hard drive file type](img/vm_vdi.png)
 
-In the next step we get the option to create a dynamically allocated image or a fixed size image as can be seen in the figure below. A fixed size image is faster but will take up the full space we select for the size of the virtual drive. A dynamically allocated image is slower but will only grow in size when needed. You will need to decide this for yourself based on the free space available on your host system.
+In the next step we get the option to create a dynamically allocated image or a fixed size image as can be seen in the figure below. A fixed size image is faster but will take up the full space we select for the size of the virtual drive. A dynamically allocated image is "slower" but will only grow in size when needed. You will need to decide this for yourself based on the free space available on your host system. However the default option is probable the best.
 
 ![Creating a VM - Virtual drive allocation method](img/vm_dynamic.png)
 
-Now we need to select the hard drive file location (leave it as is) and size of the drive. Make sure to select **at least 25GB for the size** as shown in the figure below. Hitting create will finish the process of creating a VM.
+Now we need to select the hard drive file location (leave it as is) and size of the drive. Make sure to select **at least 20GB for the size** as shown in the figure below. Hitting create will finish the process of creating a VM.
 
 > #### Warning::Image resize
 >
@@ -74,6 +78,14 @@ Start by going to `General => Advanced` and enabling the *bidirectional shared c
 
 ![Configure VM to allow bidirectional clipboard and drag'n drop](img/vm_config_clipboard.png)
 
+If you have multiple virtual machines it is also a good idea to add a description the VM. This may come in handy later when you do a cleanup of virtual machines. This can be done via `General => Description`
+
+![Adding a Description to the VM](img/vm_description.png)
+
+You should also enable *3D acceleration* which can be found under `Display => Screen` as shown in the image below. If you have a decent graphics card in your host, you can also slightly increase the *Video Memory* from 16MB to for example 24MB or 32MB.
+
+![Configure VM to enable 3D hardware acceleration](img/vm_enable_3d_acceleration.png)
+
 Default the VM is configured with a single network adapter with NAT (Network Address Translation) enabled (Network tab). This means that the VM has access to the network and also has access to the Internet. However because of NAT we will not be able to connect to the VM from another machine using SSH without configuring port forwarding. Since later on in the LAB's we will need to do just that, it is more convenient to change the network settings to a *Bridged Adapter* as shown in the figure below. Make sure to select your physical Ethernet adapter to bridge with and not your wireless interface.
 
 ![Configure VM to bridge the virtual and physical adapters](img/vm_config_bridged.png)
@@ -82,13 +94,17 @@ Default the VM is configured with a single network adapter with NAT (Network Add
 >
 > This will basically create a network bridge between the VM's network adapter and your physical host adapter making your VM's directly available on your network. This may be a security issue but can also simplify working with your VM. This option also implies that your VM will get its IP address from the same DHCP (Dynamic Host Configuration Protocol) server as your host machine if you have a DHCP enabled network.
 
-Last but not least you should also enable *3D acceleration* which can be found under `Display => Screen` as shown in the image below. If you have a decent enought graphics card in your host, you can also slightly increase the *Video Memory* from 12MB to for example 24MB or 32MB.
+Some files can be dragged and dropped between your host machine and the VM. However this does not seem to be possible for all file types. For these instances it is more convenient to create a shared directory which can be accessed from your host and the VM.
 
-![Configure VM to enable 3D hardware acceleration](img/enable_3d_acceleration.png)
+Navigate to `Settings => Shared Folders` of your virtual machine and create a shared folder on your system (for example your desktop) and make sure to select the **Auto-mount** option and not Read-only as shown in the figure below.
+
+![Creating a shared folder for your VM](img/mint_shared_folder.png)
+
+The folder should now be automatically mounted under /media in your VM on your next reboot and should also be available on the Desktop of Linux Mint.
 
 ## Installing an Operating System on the Virtual Machine
 
-Before we can install an operating system on our virtual machine, it is necessary to download an installation image for the Linux distribution we will be using. This image can then be mounted on our VM allowing us to boot from it. In our case we will use Linux Mint 18 (Sarah) - Cinnamon (64-bit), which can be downloaded from [https://www.linuxmint.com/download.php](https://www.linuxmint.com/download.php). Make sure to select the 64-bit Desktop edition. Linux Mint is derivative of Ubuntu, but with a less intrusive graphical desktop environment.
+Before we can install an operating system on our virtual machine, it is necessary to download an installation image for the Linux distribution we will be using. This image can then be mounted on our VM allowing us to boot from it. In our case we will use Linux Mint 18.2 (Sonya) - Cinnamon (64-bit), which can be downloaded from [https://www.linuxmint.com/download.php](https://www.linuxmint.com/download.php). Make sure to select the 64-bit Desktop edition. Linux Mint is derivative of Ubuntu, but with a less intrusive graphical desktop environment.
 
 Once downloaded start VirtualBox and open the settings of your VM. Next open the storage settings. Now select the virtual CD/DVD drive below the IDE controller as shown in step 1 in the figure below:
 
@@ -100,11 +116,15 @@ Ready ? Then hit the start button of the VM and follow the steps for installing 
 
 ![Live DVD or boot menu option](img/mint_first_boot.png)
 
-To start the installation process just double click the 'Install Linux Mint' icon on the desktop.
+You can ignore the message about running in software rendering mode for the moment. We will fix this later.
 
-![Starting the installation process](img/mint_start_install.png)
+To start the installation process just double click the 'Install Linux Mint' icon on the desktop. From this point on all steps are self-explanatory. Most of the installation steps can be kept to their default values.
 
-From this point on all steps are self-explanatory. Most of the installation steps can be kept to their default values.
+You will get the question if you would like to install third-party drivers. While this is a VM and I am not 100% sure about this, I selected the option to do it.
+
+![Third-pary drivers](img/mint_third_party_hardware.png)
+
+As a last step you will need to create a user account. Make sure to enter a **decent password** (no spaces or blanks and such crap).
 
 If you click inside the VM window your mouse cursor will automatically be captured. Releasing your cursor can be achieved using the right CTRL key.
 
@@ -114,7 +134,15 @@ Once the installation procedure is finished you will be asked to reboot the VM.
 
 You may or may not have noticed that your mouse movement is a bit sluggish within the VM. That is because the guest additions haven not been installed yet.
 
-Open the Devices menu which can be found at the top of the VM window. Next select **Insert Guest Additions CD image ...** as shown in the figure below. A window in Linux will open asking if you'd wish to run the package. Hit run and follow the instructions.
+Before installing the new guest additions we need to remove the old ones that come with the Linux distro. This can be accompished by opening up a terminal (via menu or `CTRL-ALT-T`) and issueing the following command:
+
+```shell
+sudo apt-get remove virtualbox-guest-utils
+```
+
+You will be requested to enter your password. Restart the VM after doing this.
+
+Once restarted, open the **Devices** menu which can be found at the top of the VM window. Next select **Insert Guest Additions CD image ...** as shown in the figure below. A window in Linux will open asking if you'd wish to run the package. Hit run and follow the instructions.
 
 ![Inserting the Guest Additions for Linux Mint](img/mint_guest_additions.png)
 
@@ -122,9 +150,9 @@ Once finished remove the image from the virtual drive (by right clicking the ico
 
 > #### Warning::Updates
 >
-> Every time you update your machine it is necessary to repeat this procedure.
+> Every time you update your machine it is necessary to repeat this procedure. While it is strongly encouraged to keep your VM up-to-date as any machine, it might be a good idea to do this at a decent moment, for example at home after the lessons and not at the start of a LAB.
 
-You should now be able to resize the guest window. Or you can switch to fullscreen by hitting `RCTRL-F`.
+You should now be able to resize the guest window. Or you can switch to full screen by hitting `RCTRL-F`. Same key-combination to switch back to windowed mode.
 
 > #### Note::Software Rendering Mode
 >
@@ -132,31 +160,17 @@ You should now be able to resize the guest window. Or you can switch to fullscre
 
 ## Creating a shared folder
 
-Some files can be dragged and dropped between your host machine and the VM. However this does not seem to be possible for all file types. For these instances it is more convenient to create a shared directory which can be accessed from your host and the VM.
-
-Navigate to `Settings => Shared Folders` of your virtual machine as depicted in the figure below:
-
-![Shared folders settings of VM](img/mint_settings_shared_folder.png)
-
-Create a shared folder on your system and make sure to select the **Auto-mount** option as shown in the figure below.
-
-![Creating a shared folder for your VM](img/mint_shared_folder.png)
-
-The folder should now be automatically mounted under /media in your VM on your next reboot and should also be available on the Desktop of Linux Mint. However if you try to open the folder you will get a permission error. To fix this it is necessary to add your current user to the group `vboxsf`. You can achieve this by opening up a terminal (`CTRL-ALT-T`) and entering the command below. More on this later.
+While we did instruct VirtualBox to mount a shared folder from Windows to Linux, it is not yet accessible. If you try to open the folder you will get a permission error. To fix this it is necessary to add your current user to the group `vboxsf`. You can achieve this by opening up a terminal (`CTRL-ALT-T`) and entering the command below. More on this later.
 
 ```shell
-$ whoami<your_account_name>
-$ sudo usermod -a -G vboxsf <your_account_name>
+sudo usermod -a -G vboxsf <your_account_name>
 ```
 
-> #### Note::Command Line instructions
->
-> Note how the commands in this course are all proceeded by the dollar sign ($). This is the symbol that indicates the end of the prompt and should not be typed. Different distributions or shells may show different symbols for this.
-
-Next logout from the current session and log back in. Open up a new terminal and enter the `id` command to get a list of all the groups your user belongs to. `111(vboxsf)` should be one of them.
+Next logout from the current session and log back in. Open up a new terminal and enter the `id` command to get a list of all the groups your user belongs to. `129(vboxsf)` should be one of them.
 
 ```shell
-$ iduid=1000(bioboost) gid=1000(bioboost) groups=1000(bioboost), 4(adm), 24(cdrom), 27(sudo), 30(dip), 46(plugdev), 107(lpadmin), 110(sambashare), 111(vboxsf)
+id
+uid=1000(bioboost) gid=1000(bioboost) groups=1000(bioboost),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),113(lpadmin),129(vboxsf),130(sambashare)
 ```
 
 ## Backups and snapshots
