@@ -3,10 +3,20 @@
 * [About this Course](README.md)
 
 ### Virtual Machine
-* [Virtual Machine](virtual_machine/virtual_machine.md)
+* [Virtual Machine](virtual_machine/readme.md)
 <!-- * [Summary](virtual_machine/summary.md) -->
 <!-- * [Quiz](virtual_machine/quiz.md) -->
 <!-- * [Exercises](virtual_machine/exercises.md) -->
+
+### Linux Basics
+* [Linux Basics](linux_basics/readme.md)
+<!-- * [Summary](linux_basics/summary.md) -->
+<!-- * [Quiz](linux_basics/quiz.md) -->
+<!-- * [Exercises](linux_basics/exercises.md) -->
+
+
+
+
 
 <!-- # Summary
 

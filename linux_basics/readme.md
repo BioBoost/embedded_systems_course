@@ -2,7 +2,7 @@
 
 # Linux Basics
 
-The Raspberry Pi 2 embedded system is quite a complex system with a lot of features and complicated hardware. While it is possible to write software that runs directly on the embedded processor (called a bare-metal application) it is way to complex. Typically an Operating System (OS) is installed to manage all the hardware and resources making it easier for software developers to create application to run on the system. That way the hardware can be accessed through services provided by the OS.
+The Raspberry Pi 3 embedded system is quite a complex system with a lot of features and complicated hardware. While it is possible to write software that runs directly on the embedded processor (called a bare-metal application) it is way to complex. Typically an Operating System (OS) is installed to manage all the hardware and resources making it easier for software developers to create application to run on the system. That way the hardware can be accessed through services provided by the OS.
 
 Choosing an operating system for an embedded system mainly depends on the hardware as not each operating system will provide support for the embedded system.
 
@@ -10,7 +10,7 @@ Some existing operating systems are shown in the image below:
 
 ![Some operating systems](img/list-of-operating-systems.jpg)
 
-The ones that have support for the Raspberry Pi 2 are:
+The main operating systems that have support for the Raspberry Pi 3 are:
 
 * Raspbian, Ubuntu Mate, OSMC, OpenElec, ... (Linux based)
 * Windows IoT core (Windows based)
@@ -33,11 +33,19 @@ First is the Linux kernel which was created in 1991 by a Finnish computer scienc
 
 Second, are so-called "Linux distributions", also called distros. They are complete operating systems that consist of the Linux kernel itself and many other applications and software packages. Because they typically contain a lot of software created by the GNU project, some people (mostly GNU guys themselves) claim that they should be called GNU/Linux instead of just Linux.
 
+<!-- In 1983, Richard Stallman, founder of the Free Software Foundation, set forth plans of a complete Unix-like operating system, called GNU, composed entirely of free software. In September of that year, Stallman published a manifesto in Dr. Dobb's Journal detailing his new project publicly, outlining his vision of free software.[7][8] Software development work began in January 1984. By 1991, the GNU mid-level portions of the operating system were almost complete, and the upper level could be supplied by the X Window System, but the lower level (kernel, device drivers, system-level utilities and daemons) was still mostly lacking. The GNU kernel was called GNU Hurd. The Hurd followed an ambitious design which proved unexpectedly difficult to implement and has only been marginally usable.
+
+Independently, in 1991, Linus Torvalds released the first version of the Linux kernel. Early Linux developers ported GNU code, including the GNU C Compiler, to the kernel. The free software community adopted the use of the Linux kernel as the missing kernel for the GNU operating system. This work filled the remaining gaps in providing a completely free operating system.
+
+Over the next few years, several suggestions arose for naming operating systems using the Linux kernel and GNU components. In 1992, the Yggdrasil Linux distribution adopted the name "Linux/GNU/X". In Usenet and mailing-list discussions, one can find usages of "GNU/Linux" as early as 1992[9] and of "GNU+Linux" as early as 1993.[10] The Debian project, which was at one time sponsored by the Free Software Foundation, switched to calling its product "Debian GNU/Linux" in early 1994;[6][11][12][13] This change followed a request by Richard Stallman (who initially proposed "LiGNUx," but suggested "GNU/Linux" instead after hearing complaints about the awkwardness of the former term).[14] GNU's June 1994 Bulletin describes "Linux" as a "free Unix system for 386 machines" (with "many of the utilities and libraries" from GNU),[15] but the January 1995 Bulletin switched to the term "GNU/Linux" instead.[16]
+
+Stallman's and the FSF's efforts to include "GNU" in the name started around 1994, but were reportedly mostly via private communications (such as the above-mentioned request to Debian) until 1996.[17][18] In May 1996, Stallman released Emacs 19.31 with the Autoconf system target "linux" changed to "lignux" (shortly thereafter changed to "linux-gnu" in emacs 19.32),[19][20] and included an essay "Linux and the GNU system"[21] suggesting that people use the terms "Linux-based GNU system" (or "GNU/Linux system" or "Lignux" for short). He later used "GNU/Linux" exclusively, and the essay was superseded by Stallman's 1997 essay, "Linux and the GNU project".[1] -->
+
 When we are talking about embedded Linux we actually are talking about the same kernel code running on millions of other systems. There is no separate code base for embedded systems. When we however build a Linux system for an embedded target we do exclude features we won't be using. We are also cross-compiling the kernel to binary code that can run on the target system.
 
 ### The Linux kernel
 
-The Linux kernel provides the core system facilities required for any system based upon Linux to operate correctly. It has complete control over everything that occurs in the system. Application software relies upon specific features of the Linux kernel such as its handling of hardware devices and its provision of many fundamental abstractions such as virtual memory, sockets, tasks (known as processes), files and many others. A diagram is shown below
+The Linux kernel **provides the core system facilities** required for any system based upon Linux to operate correctly. It has complete control over everything that occurs in the system. Application software relies upon specific features of the Linux kernel such as its handling of hardware devices and its **provision of many fundamental abstractions** such as virtual memory, sockets, tasks (known as processes), files and many others. A diagram is shown below
 
 ![The Linux kernel and it's services](img/kernel_services.png)
 
@@ -72,7 +80,7 @@ Some key features of the kernel are:
 * Modularity: Can include only what a system needs even at run time.
 * Easy to program: You can learn from existing code. Many useful resources on the net.
 
-Very important to know is that the kernel interface is stable over time. This basically means that only new system calls can be added by the kernel developers and no old calls can be removed. This means that applications running on an older kernel version should always work on a newer one. The system call interface is actually wrapped by the C library and user space applications usually never make a system call directly but rather use the corresponding C library functions.
+Very important to know is that the **kernel interface is stable over time**. This basically means that only new system calls can be added by the kernel developers and no old calls can be removed. This means that applications running on an older kernel version should always work on a newer one. The system call interface is actually wrapped by the C library and user space applications usually never make a system call directly but rather use the corresponding C library functions.
 
 ## The MAN-pages
 
@@ -94,13 +102,13 @@ Exiting the man-pages is achieved by hitting the "q" key.
 >
 > What does the `cat` command do? How can it be used to output the content of a file? Try to read the file "/proc/cpuinfo"
 
--
+<!-- How to place a break here? -->
 
 > #### Assignment::The dmesg command
 >
 > What does the `dmesg` command do?
 
--
+<!-- How to place a break here? -->
 
 > #### Assignment::The free command
 >
@@ -117,7 +125,7 @@ Linux inherits many of its concepts of filesystem organization from its Unix pre
 
 The Linux File system Hierarchy Standard (checkout [Filesystem Hierarchy Standard](http://www.pathname.com/fhs/)), or FHS for short, is a prescriptive standard maintained by the Linux Foundation that establishes the organizational layout that Linux distributions should uphold for interoperability, ease of administration, and the ability to implement cross-distro applications reliably.
 
-One important thing to mention when dealing with these systems is that Linux implements just about everything as a file. This means that a text file is a file, a directory is a file (simply a list of other files), a printer is represented by a file (the device drivers can send anything written to the printer file to the physical printer), etc.
+One important thing to mention when dealing with these systems is that Linux implements just about **everything as a file**. This means that a text file is a file, a directory is a file (simply a list of other files), a printer is represented by a file (the device drivers can send anything written to the printer file to the physical printer), a serial port is a file, etc.
 
 Although this is in some cases an oversimplification, it informs us of the approach that the designers of the system encouraged: passing text and bytes back and forth and being able to apply similar strategies for editing and accessing diverse components.
 
@@ -142,7 +150,7 @@ bin   dev  home  lost+found  mnt  proc  run   selinux  sys  usr
 boot  etc  lib   media       opt  root  sbin  srv      tmp  var
 ```
 
-This will tell you all directories and files in your current directory.
+This will give an overview of all directories and files in your current directory.
 
 The `ls` command can take some optional flags. Flags modify the commands default behavior to either process or display the data in a different way.
 
@@ -163,12 +171,12 @@ drwxr-xr-x  2 root root  4096 Jun 20 07:36 media
 ...
 ```
 
-This produces output with one line for each file or directory (the name is on the far right). This has a lot of information that we are not interested in right now. One part we are interested in though is the very first character, which tells us what kind of file it is. The three most common types are:
-* -: Regular file
-* d: Directory (a file of a specific format that lists other files)
-* l: A hard or soft link (basically a shortcut to another file on the system)
+This produces output with one line for each file or directory (the name is on the far right). This has a lot of information that we are not interested in right now. One part we are interested in though is the very **first character**, which tells us what **kind of file** it is. The three most common types are:
+* `-`: Regular file
+* `d`: Directory (a file of a specific format that lists other files)
+* `l`: A hard or soft link (basically a shortcut to another file on the system)
 
-The -a flag lists all files, including hidden files. In Linux, files are hidden automatically if they begin with a dot:
+The `-a` flag lists all files, including hidden files. In Linux, files are hidden automatically if they begin with a dot:
 
 ```shell
 pi@HAL:/$ ls -a
@@ -192,15 +200,14 @@ You can follow the command with either an absolute or a relative pathname.
 * An **absolute path** is a file path that specifies the location of a directory from at the top of the directory tree. Absolute paths begin with a "/", as you see above.
 * A **relative path** is a file path that is relative to the current working directory. This means that instead of defining a location from the top of the directory structure, it defines the location in relation to where you currently are.
 
-
-For instance, if you want to move to the home directory of the pi user, while in the directory “/home, you can issue the command:
+For instance, if you want to move to the home directory of the pi user, while in the directory `/home`, you can issue the command:
 
 ```shell
 pi@HAL:/home$ cd pi
 pi@HAL:/home/pi$
 ```
 
-The lack of the "/" from the beginning tells to use the current directory as the base for looking for the path.
+The lack of the `/` from the beginning tells to use the current directory as the base for looking for the path.
 
 This is where the `..` directory link comes in handy. To move to the parent directory of your current directory, you can type:
 
