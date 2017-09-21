@@ -133,3 +133,13 @@ true; echo "yes"    # prints "yes"
 false && echo "yes" # does not echo
 true && echo "yes"  # prints "yes"
 Newlines are interchangeable with ; when terminating commands.
+
+
+
+
+
+
+
+
+Conditions in bash scripting
+https://linuxacademy.com/blog/linux/conditions-in-bash-scripting-if-statements/
