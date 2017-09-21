@@ -14,6 +14,18 @@
 <!-- * [Quiz](linux_basics/quiz.md) -->
 <!-- * [Exercises](linux_basics/exercises.md) -->
 
+### RPi Operating System
+* [RPi Operating System](rpi_operating_system/readme.md)
+<!-- * [Summary](rpi_operating_system/summary.md) -->
+<!-- * [Quiz](rpi_operating_system/quiz.md) -->
+<!-- * [Exercises](rpi_operating_system/exercises.md) -->
+
+### Secure Shell
+* [Secure Shell](secure_shell/readme.md)
+<!-- * [Summary](secure_shell/summary.md) -->
+<!-- * [Quiz](secure_shell/quiz.md) -->
+<!-- * [Exercises](secure_shell/exercises.md) -->
+
 
 
 
@@ -25,6 +37,7 @@
 <!-- * [Linux Basics](linux_basics.md)
 * [Rpi Operating System](rpi_operating_system.md)
 * [Connecting to the RPi](connecting_to_the_rpi.md)
+
 * [Basic Shell Scripting](basic_shell_scripting.md)
 * [Compiling and Makefiles](compiling_makefiles.md)
 <!-- * [The Linux Kernel](the_linux_kernel.md) -->

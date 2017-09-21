@@ -1,8 +1,6 @@
 <!-- toc -->
 
-# Connecting to the Rpi
-
-## Using SSH
+# Secure Shell
 
 There are a couple of ways that you can access a shell (command line) remotely on most Linux/Unix systems. One of the older ways is to use the telnet program, which is available on most network capable operating systems. Accessing a shell account through the telnet method though poses a danger in that everything that you send or receive over that telnet session is visible in plain text on your local network, and the local network of the machine you are connecting to. So anyone who can "sniff" the connection can see your username, password, email that you read, and commands that you run. For these reasons you need a more sophisticated program than telnet to connect to a remote host.
 
@@ -27,6 +25,7 @@ $ ssh pi@10.0.0.35
 ```
 
 The first time around it will ask you if you wish to add the remote host to a list of known_hosts, go ahead and say yes.
+
 ![First SSH connection](img/first_connection_with_ssh.png)
 
 It is important to pay attention to this question however because this is one of SSH's major features. Host validation. To put it simply, ssh will check to make sure that you are connecting to the host that you think you are connecting to. That way if someone tries to trick you into logging into their machine instead so that they can sniff your SSH session, you will have some warning, like this:
@@ -39,8 +38,7 @@ After saying yes, it will prompt you for your password on the remote system. If 
 
 ![Successful SSH Connection](img/ssh_connected.png)
 
-
-### Generating Keys for SSH
+## Generating Keys for SSH
 
 Next we need to generate a public and private key-pair.
 
@@ -70,8 +68,7 @@ $ ls
 config  id_dsa  id_dsa.pub  known_hosts
 ```
 
-
-### Installing the Public Key
+## Installing the Public Key
 
 Next the public key needs to be saved on the remote divice, the Raspberry Pi in our case. Login to your RPi as you did before using `<remoteusername>@<hostname|ip_address>`. Now traverse to the `.ssh` directory if you already got one, otherwise create one.
 
@@ -92,7 +89,7 @@ The commands above will first set all permissions of the directory and files bel
 
 Now you should be able to login to the Raspberry Pi using your private key and without having to enter a password.
 
-### Using Secure Copy
+## Using Secure Copy
 
 Secure Copy, or scp, allows files to be copied to, from, or between different hosts. It uses ssh for data transfer and provides the same authentication and same level of security as ssh.
 
@@ -102,7 +99,7 @@ The syntax of the scp command is as follows:
 scp [[user1@]host1:]<source> [[user2@]host2:]<destination>
 ```
 
-#### Examples
+### Examples
 
 Copy the file "foobar" from a remote host to the local host
 
@@ -133,8 +130,3 @@ Copying the files "foo.txt" and "bar.txt" from the local host to your home direc
 ```shell
 $ scp foo.txt bar.txt <username>@<remotehost>:~
 ```
-
-
-## Using Serial port
-
-[TODO]

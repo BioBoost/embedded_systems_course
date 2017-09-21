@@ -5,7 +5,7 @@
 The Raspberry Pi foundation provides several ready to use operating system images for the Pi. At the moment of this writing the following are available:
 
 * Raspbian - The Foundation's official supported operating system (Debian Jessie)
-* Ubuntu Mate - Official Ubuntu flavor featuring the MATE desktop 
+* Ubuntu Mate - Official Ubuntu flavor featuring the MATE desktop
 * Snappy Ubuntu Core - A new, transactionally-updated Ubuntu for IoT devices, clouds and more
 * OSMC - Open Source Media Centre
 * OPENELEC - Open Embedded Linux Entertainment Centre
@@ -293,7 +293,6 @@ Notice how the disk size has increased and the used disk space percentage has dr
 ![Output of the disk free command after initial configuration](img/free_disk_space.png)
 
 Also notice how the hostname of the device changed (HAL  in this case). Rescanning the subnet should result in systems with all different hostnames.
-
 
 ## RPi Hello Injector
 
