@@ -360,26 +360,16 @@ fi
 
 > #### Assignment::Cloning course repositories
 >
-> Create a script that clones the course repositories from Github. Make sure to
-> check if repository already exists and if it does only do a pull.
+> Create a script that clones the course repositories from Github. Make sure to check if repository already exists and if it does only do a pull.
 
--
-
-> #### Assignment::Logging in to the pi
->
-> Create a script which searches the network for your raspberry pi and
-> automatically connects to the pi using ssh.
-
--
+<!-- How to break here? -->
 
 > #### Assignment::Updating a project on the pi
 >
-> Create a script which copies a directory, including all its files, to the raspberry pi.
-> Do this using the secure shell copy (scp).
+> Create a script which copies a directory, including all its files, to the raspberry pi. Do this using the secure shell copy (scp).
 
--
+<!-- How to break here? -->
 
 > #### Assignment::SSH setup
 >
-> Create a script which setups the SSh keys on the pi and also creates keys for the
-> current user if none exist yet. Hint: you can use ssh to execute commands on a remote host.
+> Create a script which setups the SSH keys on the pi and also creates keys for the current user if none exist yet. Hint: you can use ssh to execute commands on a remote host.

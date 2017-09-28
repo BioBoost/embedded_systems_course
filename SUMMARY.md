@@ -26,6 +26,18 @@
 <!-- * [Quiz](secure_shell/quiz.md) -->
 <!-- * [Exercises](secure_shell/exercises.md) -->
 
+### Basic Shell Scripting
+* [Basic Shell Scripting](basic_shell_scripting/readme.md)
+<!-- * [Summary](basic_shell_scripting/summary.md) -->
+<!-- * [Quiz](basic_shell_scripting/quiz.md) -->
+<!-- * [Exercises](basic_shell_scripting/exercises.md) -->
+
+### Compiling and Makefiles
+* [Compiling and Makefiles](compiling_makefiles/readme.md)
+<!-- * [Summary](compiling_makefiles/summary.md) -->
+<!-- * [Quiz](compiling_makefiles/quiz.md) -->
+<!-- * [Exercises](compiling_makefiles/exercises.md) -->
+
 
 
 
