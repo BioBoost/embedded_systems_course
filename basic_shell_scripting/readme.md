@@ -360,7 +360,7 @@ fi
 
 > #### Assignment::Cloning course repositories
 >
-> Create a script that clones the course repositories from Github. Make sure to check if repository already exists and if it does only do a pull.
+> Create a script that clones the course repositories from Github. Make sure to check if repository already exists and if it does only do a pull. The repos are https://github.com/BioBoost/embedded_systems_course and https://github.com/BioBoost/embedded_systems_tools_and_scripts
 
 <!-- How to break here? -->
 
