@@ -38,6 +38,12 @@
 <!-- * [Quiz](compiling_makefiles/quiz.md) -->
 <!-- * [Exercises](compiling_makefiles/exercises.md) -->
 
+### Communicating using I2C
+* [Communicating using I2C](communicating_using_i2c/readme.md)
+<!-- * [Summary](communicating_using_i2c/summary.md) -->
+<!-- * [Quiz](communicating_using_i2c/quiz.md) -->
+<!-- * [Exercises](communicating_using_i2c/exercises.md) -->
+
 
 
 
