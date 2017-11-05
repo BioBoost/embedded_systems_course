@@ -45,7 +45,9 @@
 <!-- * [Exercises](communicating_using_i2c/exercises.md) -->
 
 
-
+### Assignments
+* [Assignments](assignments/readme.md)
+* [Week 7](assignments/week_7.md)
 
 
 <!-- # Summary -->
