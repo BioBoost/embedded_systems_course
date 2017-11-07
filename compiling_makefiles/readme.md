@@ -468,3 +468,5 @@ But wait, how do you build a compiler if you do not have a compiler?
 Generally, when new platforms (architectures and/or operating systems) are released they come with a native compiler which may not be as powerful as the GCC ones but can compile basic C programs with minimal or no optimization. The default C compiler on a new system is often named cc. When GCC is ported to a new platform, this default compiler is used to build GCC which can then be used to build other applications on top of it.
 
 As a configuration such as a Linux OS on an Intel x86 machine is pretty common, it is likely that the system comes with a pre-built GCC suite with the program cc simply linking to gcc.
+
+<!-- TODO: Add the makefile version that we use for project which compiles all cpp files in src dir -->

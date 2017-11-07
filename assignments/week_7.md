@@ -1,6 +1,5 @@
 # The Thumper and TouchBerry Project
 
-
 ## The NodeJS REST service on the Thumper
 
 The Thumper can be controlled using it's RESTfull web interface that is hosted on port 3000. The API can be found at [https://github.com/BioBoost/node_thumper_control](https://github.com/BioBoost/node_thumper_control).
@@ -67,7 +66,7 @@ Create a C++ application for the Raspberry Pi that can read the status of the to
 * Calibrate the device
 * Reset the device
 
-Next extend the application so you can also control the 5 RGB LEDs of the shield (via the TLC59116 I2C LED driver - which is at address `0xC0`). This device is a bit complicated so make sure to read the datasheet. Considerations to make are:
+Next extend the application so you can also control the 5 RGB LEDs of the shield (via the TLC59116 I2C LED driver - which is at address `0x60`). This device is a bit complicated so make sure to read the datasheet. Considerations to make are:
 * Make sure to turn the oscillator on
 * Make sure that the PWM is enabled
 * Write a value to the brightness control registers
@@ -82,24 +81,42 @@ Next the Thumper needs to be controlled via its REST interface. This means we ne
 
 More information about this library can be found at [https://github.com/mrtazz/restclient-cpp](https://github.com/mrtazz/restclient-cpp).
 
-### Dependencies
+### Building your project with restclient-cpp
+
+There are two options here:
+* Compiling your whole project on the Raspberry Pi (using the native compiler on the pi itself being `g++`)
+* Cross-compiling your project for ARM on your x86 development machine (using the `arm-linux-gnueabihf-g++` cross-compiler)
+
+Both require the library to be installed on the Raspberry Pi as it is dynamically loaded when your application is run. However each approach also needs the library when compiling your project.
+
+When compiling on the Raspberry Pi no special actions are needed as the native compiler is just `g++` (not the cross-compiler) and it will automatically look for the library in `/usr/local/lib`.
+
+However when we cross-compile our project on an x86 machine we also need the library to be cross-compiled (object files compiled for ARM). In this approach we also need to be able to tell the cross-compiler (`arm-linux-gnueabihf-g++`) where it can find the actual library files. We cannot install it locally on our development machine in `/usr/local/lib` because that is meant only for libraries compiled for the architecture of that machine (x86 in this case).
+
+
+#### Dependencies
 
 ```shell
-sudo apt-get install libcurl4-gnutls-dev
+sudo apt-get update && sudo apt-get install git build-essential autoconf automake libtool libcurl4-gnutls-dev
 ```
 
-### Installing the library
+#### Compiling the library
 
 ```shell
 sudo su
 cd /usr/local/src
 git clone https://github.com/mrtazz/restclient-cpp.git
+cd restclient-cpp
 ./autogen.sh
 ./configure
 make install
 ```
 
 Checkout `ls /usr/local/lib`. The lib files should be there.
+
+#### Native compiling on the Raspberry Pi
+
+At the moment I have not been able to successfully setup the cross-compilation process for an application making use of this restclient-cpp library. For this reason the only option that is available for us is copying your whole project to the Raspberry Pi and compile it natively on the Pi itself.
 
 Using the `restclient-cpp` library requires you to add the library to the compilation steps. For this you can use the more advanced `Makefile` shown below as an example. Notice the `LIBS=-lrestclient-cpp` variable. If you use the makefile shown below as is, you will need to place all you code files inside a subdirectory `src`.
 
@@ -140,6 +157,14 @@ clean :
 makebuildir:
 	mkdir -p $(BUILDDIR)
 ```
+
+Copying your project to the Pi can easily be achieved using `scp`. Using SSH you can even issue commands remotely by adding them after the ssh command as shown below:
+
+```shell
+ssh pi@<ip_of_pi> "cd ~/your_app/ && make clean && make && ./bin/app"
+```
+
+The command above allows you to connect to the Raspberry Pi, execute a make command and then run the resulting binary via the ssh connection.
 
 ### Assignment Part 2 - REST client
 
