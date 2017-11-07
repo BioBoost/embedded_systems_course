@@ -110,6 +110,7 @@ cd restclient-cpp
 ./autogen.sh
 ./configure
 make install
+ldconfig
 ```
 
 Checkout `ls /usr/local/lib`. The lib files should be there.
