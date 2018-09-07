@@ -1,5 +1,7 @@
 # Communicating using I2C
 
+<!-- Nice tutorial on I2c: https://learn.sparkfun.com/tutorials/i2c -->
+
 Why I2C? Because
 * Its a common standard
 * Its "fast" for low-speed devices
