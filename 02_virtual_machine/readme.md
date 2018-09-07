@@ -1,4 +1,6 @@
-<!-- toc -->
+---
+description: This chapter contains a walk-through on how to setup a Linux virtual machine. This VM is used throughout the course as a development platform.
+---
 
 # Running a Virtual Development Machine
 
@@ -6,9 +8,11 @@ A virtual machine (VM) is an emulation of a particular computer system. This sys
 
 Several software packages are available to create and run virtual machines. Examples are VMware, Hyper-V which comes with Windows 8, Oracle VirtualBox, ... For our labs we will be using VirtualBox as this is free, lightweight, easy to use and available for Windows, Linux, Mac and Solaris.
 
-> #### Note::Hyper-V
->
-> Hyper-V, codenamed Viridian and formerly known as Windows Server Virtualization, is a native hypervisor; it can create virtual machines on x86-64 systems. Starting with Windows 8, Hyper-V supersedes Windows Virtual PC as the hardware virtualization component of the client editions of Windows NT.
+{% hint style="note" %}
+**Hyper-V**
+
+Hyper-V, codenamed Viridian and formerly known as Windows Server Virtualization, is a native hypervisor; it can create virtual machines on x86-64 systems. Starting with Windows 8, Hyper-V supersedes Windows Virtual PC as the hardware virtualization component of the client editions of Windows NT.
+{% endhint %}
 
 ## Installing Virtual Box
 
@@ -22,9 +26,11 @@ The installer of VirtualBox should also have created virtual network adapters (s
 
 ![VirtualBox virtual network adapters](img/virtual_box_network_adapters.png)
 
-> #### Alert::Virtual Box Network Adapters
->
-> In some cases these network adapters may interfere with the correct working of your physical network. For example for LAN-games that use UDP broadcasting to discover each other. In this case you can just disable the adapters. Make sure to re-enable them before using VirtualBox.
+{% hint style="alert" %}
+**Virtual Box Network Adapters**
+
+In some cases these network adapters may interfere with the correct working of your physical network. For example for LAN-games that use UDP broadcasting to discover each other. In this case you can just disable the adapters. Make sure to re-enable them before using VirtualBox.
+{% endhint %}
 
 Once finished you can start the VirtualBox client and you should get the interface shown in the figure below:
 
@@ -60,9 +66,11 @@ In the next step we get the option to create a dynamically allocated image or a 
 
 Now we need to select the hard drive file location (leave it as is) and size of the drive. Make sure to select **at least 20GB for the size** as shown in the figure below. Hitting create will finish the process of creating a VM.
 
-> #### Warning::Image resize
->
-> If you chose to create a dynamically allocated image you can make it even bigger as it will only use as much space as needed. Resizing an existing image can be a real pain and can also corrupt your image so make sure you don't have to do this.
+{% hint style="warning" %}
+**Image resize**
+
+If you chose to create a dynamically allocated image you can make it even bigger as it will only use as much space as needed. Resizing an existing image can be a real pain and can also corrupt your image so make sure you don't have to do this.
+{% endhint %}
 
 ![Creating a VM - Location and size of the virtual drive](img/vm_size.png)
 
@@ -90,9 +98,11 @@ Default the VM is configured with a single network adapter with NAT (Network Add
 
 ![Configure VM to bridge the virtual and physical adapters](img/vm_config_bridged.png)
 
-> #### Note::Bridged Adapter
->
-> This will basically create a network bridge between the VM's network adapter and your physical host adapter making your VM's directly available on your network. This may be a security issue but can also simplify working with your VM. This option also implies that your VM will get its IP address from the same DHCP (Dynamic Host Configuration Protocol) server as your host machine if you have a DHCP enabled network.
+{% hint style="note" %}
+**Bridged Adapter**
+
+This will basically create a network bridge between the VM's network adapter and your physical host adapter making your VM's directly available on your network. This may be a security issue but can also simplify working with your VM. This option also implies that your VM will get its IP address from the same DHCP (Dynamic Host Configuration Protocol) server as your host machine if you have a DHCP enabled network.
+{% endhint %}
 
 Some files can be dragged and dropped between your host machine and the VM. However this does not seem to be possible for all file types. For these instances it is more convenient to create a shared directory which can be accessed from your host and the VM.
 
@@ -148,15 +158,19 @@ Once restarted, open the **Devices** menu which can be found at the top of the V
 
 Once finished remove the image from the virtual drive (by right clicking the icon on the Desktop of Linux Mint and choosing Eject). Restart the virtual machine.
 
-> #### Warning::Updates
->
-> Every time you update your machine it is necessary to repeat this procedure. While it is strongly encouraged to keep your VM up-to-date as any machine, it might be a good idea to do this at a decent moment, for example at home after the lessons and not at the start of a LAB.
+{% hint style="warning" %}
+**Updates**
+
+Every time you update your machine it is necessary to repeat this procedure. While it is strongly encouraged to keep your VM up-to-date as any machine, it might be a good idea to do this at a decent moment, for example at home after the lessons and not at the start of a LAB.
+{% endhint %}
 
 You should now be able to resize the guest window. Or you can switch to full screen by hitting `RCTRL-F`. Same key-combination to switch back to windowed mode.
 
-> #### Note::Software Rendering Mode
->
-> If you get a popup after login saying that Linux Mint is running in software rendering mode, you may have forgotten to enable 3D acceleration. This can be fixed by going to `Settings => Display => Screen` and enabling **3D Acceleration** of your virtual machine. You may also need to increase the video memory a bit to for example **32MB**. Make sure to restart the VM after changing these settings.
+{% hint style="note" %}
+**Software Rendering Mode**
+
+If you get a popup after login saying that Linux Mint is running in software rendering mode, you may have forgotten to enable 3D acceleration. This can be fixed by going to `Settings => Display => Screen` and enabling **3D Acceleration** of your virtual machine. You may also need to increase the video memory a bit to for example **32MB**. Make sure to restart the VM after changing these settings.
+{% endhint %}
 
 ## Creating a shared folder
 

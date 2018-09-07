@@ -2,11 +2,15 @@
 
 * [About this Course](README.md)
 
-<!-- ### Virtual Machine -->
-<!-- * [Virtual Machine](virtual_machine/readme.md) -->
-<!-- * [Summary](virtual_machine/summary.md) -->
-<!-- * [Quiz](virtual_machine/quiz.md) -->
-<!-- * [Exercises](virtual_machine/exercises.md) -->
+<!-- ### Introduction to IoT Devices -->
+<!-- TODO -->
+
+### Virtual Machine
+
+* [Introduction](02_virtual_machine/readme.md)
+
+
+
 
 <!-- ### Linux Basics -->
 <!-- * [Linux Basics](linux_basics/readme.md) -->
