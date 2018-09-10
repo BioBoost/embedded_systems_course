@@ -1,14 +1,11 @@
 # Summary
 
 * [About this Course](README.md)
+* [Introduction](02_virtual_machine/readme.md)
+* [RPi Operating System](03_rpi_operating_system/readme.md)
 
 <!-- ### Introduction to IoT Devices -->
 <!-- TODO -->
-
-### Virtual Machine
-
-* [Introduction](02_virtual_machine/readme.md)
-
 
 
 
