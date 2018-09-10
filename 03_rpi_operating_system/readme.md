@@ -99,7 +99,15 @@ If you wish to disable the serial tty and not allow logins via this interface yo
 
 #### Terminal Emulator
 
-Next a terminal emulator that supports serial port connections, such as Putty, is required. Just select "serial" as connection type, "COMx" (where x is an integer number) as serial line and "115200" as the speed. An example is shown in the image below. Choose open and you will a get a command line interface.
+Next a terminal emulator that supports serial port connections, such as Putty, is required.
+
+{% hint style="note" %}
+**Putty**
+
+PuTTY is a free implementation of Telnet and SSH for Windows and Unix platforms, along with an xterm terminal emulator. It can be downloaded from [http://www.chiark.greenend.org.uk/~sgtatham/putty](http://www.chiark.greenend.org.uk/~sgtatham/putty).
+{% endhint %}
+
+Just select "serial" as connection type, "COMx" (where x is an integer number) as serial line and "115200" as the speed. An example is shown in the image below. Choose open and you will a get a command line interface.
 
 ![Serial line connection parameters](img/serial_to_usb_parameters.png)
 
@@ -109,12 +117,90 @@ Next a terminal emulator that supports serial port connections, such as Putty, i
 You can find the COM port number in the device manager. Select the "Ports (COM & LPT)" category and look for a "Silicon Labs CP210x USB to UART Bridge (COMx)" device. When using a different USB to serial port bridge adapter, the name might differ but it will always show up as a device in that category with a specific COM-port id.
 {% endhint %}
 
-Now connect the shield to the Raspberry Pi, plug in the SD card and the power supply and watch the kernel messages flash by. You will be served a login prompt requesting a username and password. The default username is `pi` and password is `raspberry`.
+Now connect the shield to the Raspberry Pi, plug in the SD card and the power supply and watch the kernel messages flash by. You will be served a login prompt requesting a username and password. The default username and password can be found on the Raspberry Pi website. For Raspbian it is `pi` as username and `raspberry` as password. Once you login with these credentials you are presented with the command line interface. From this point on you can start to execute commands on the Pi.
 
 {% hint style="warning" %}
 **Default Logins**
 
-Default logins should always be changed. Remember the news item on a bot network consisting of 100th of thousands of IoT devices. They were all equipped with default usernames and passwords.
+Default logins should always be changed. Remember the news item on a bot network consisting of 100th of thousands of IoT devices. They were all equipped with default usernames and passwords. The default password can be changed using the Linux `passwd` command.
 {% endhint %}
 
-Login to the Raspberry Pi using these default credentials and change the password using the Linux `passwd` command.
+One of the most useful commands you should remember is the `ifconfig` command which displays the current network interfaces and their configuration parameters. If you execute the command you should get a similar output to the one shown below. Try to identify the IPv4, IPv6 address and MAC address of the primary Ethernet interface (eth0).
+
+```shell
+pi@raspberrypi:~$ ifconfig
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.0.172  netmask 255.255.255.0  broadcast 10.0.0.255
+        inet6 fe80::7047:2de2:fdfa:656a  prefixlen 64  scopeid 0x20<link>
+        inet6 2a02:a03f:5cca:4700:6886:16ab:1fec:2525  prefixlen 64  scopeid 0x0<global>
+        ether b8:27:eb:b0:1c:5e  txqueuelen 1000  (Ethernet)
+        RX packets 16227  bytes 17904422 (17.0 MiB)
+        RX errors 0  dropped 25  overruns 0  frame 0
+        TX packets 6526  bytes 612947 (598.5 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether b8:27:eb:e5:49:0b  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+
+The other interfaces are the local loopback interface (lo) and the wireless interface (wlan0).
+
+### SSH Connection
+
+SSH or Secure SHell is a secure way to connect to a device and execute commands from a remote host. In the old days **Telnet** was the way to go but it sends all commands and login information as **clear text**. With **SSH everything is encrypted**. An SSH daemon listen by default on port 22.
+
+Raspbian used to come with the SSH daemon enabled by default. However, because of security reasons the **SSH daemon is now disabled by default**. To enable SSH on a headless setup, a file called `ssh` (without any extension) has to be created onto the boot partition of the SD card. This needs to be done prior to the first time you boot the RPi. Once the SD card has been booted, this approach will not work anymore.
+
+![Enabling the SSH daemon on boot](img/enabling_ssh_daemon.png)
+
+When using the serial connection to connect to the RPi, the SSH daemon can also be activated via `raspi-config` or by enabling the SystemD service.
+
+To enable the SSH daemon using raspi-config, start the configuration tool by executing `sudo raspi-config`. Navigate to `Interfacing Options => SSH` and enable it by selecting `Yes`. The status of the daemon can be verified by requesting the status from SystemD:
+
+```shell
+pi@raspberrypi:~$ sudo service ssh status
+● ssh.service - OpenBSD Secure Shell server
+   Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: enab
+   Active: active (running) since Mon 2018-09-10 18:37:49 UTC; 23s ago
+  Process: 1869 ExecStartPre=/usr/sbin/sshd -t (code=exited, status=0/SUCCESS)
+ Main PID: 1872 (sshd)
+   CGroup: /system.slice/ssh.service
+           └─1872 /usr/sbin/sshd -D
+```
+
+The SSD daemon should be `active (running)`.
+
+{% hint style="info" %}
+**Raspi Config Tool**
+
+The raspi-config tool helps you to configure your Raspberry Pi; several settings can be changed with this tool without having to know the correct commands to use. It is written as a bash script, run in a terminal window, and uses whiptail (whiptail is a "dialog" replacement using *newt* instead of *ncurses*, see "man whiptail") to create the windows, menus and messages. Some changes require "administrator" permissions, so the tool must be run using `sudo`.
+{% endhint %}
+
+Feel free to explore the options in rasp-config. It also allows you to configure the keyboard layout, WiFi settings, ...
+
+The SSH daemon can also be started by requesting a start from SystemD: `sudo service ssh start`.
+
+#### Connecting to the RPi via SSH
+
+Connecting to a device using the SSH protocol can be easily achieved using a terminal tool such as Putty. All you have to do is start Putty and select the SSH connection option and specify the IP address of the device. Once the connection is configured you can open it.
+
+![Opening an SSH connection using Putty](img/putty.png)
+
+The first time you connect to your RPi, Putty will warn you that the host you are connecting to is unknown. This is a safety measure build into SSH.
+
+![SSH warning unknown remote](img/putty_unknown_host.png)
+
+Once connected, you will be presented with the command line interface (CLI) of the Linux operating system running on your device.
