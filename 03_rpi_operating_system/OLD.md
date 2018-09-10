@@ -1,47 +1,29 @@
-<!-- toc -->
 
-# Operating Systems
 
-The Raspberry Pi foundation provides several ready to use operating system images for the Pi. At the moment of this writing the following are available:
 
-* Raspbian - The Foundation's official supported operating system (Debian Jessie)
-* Ubuntu Mate - Official Ubuntu flavor featuring the MATE desktop
-* Snappy Ubuntu Core - A new, transactionally-updated Ubuntu for IoT devices, clouds and more
-* OSMC - Open Source Media Centre
-* OPENELEC - Open Embedded Linux Entertainment Centre
-* PINET - Raspberry Pi Classroom Management Solution
-* Windows 10 IoT Core
-* RISC OS - A non-Linux distribution
 
-For this course we will be using the Raspbian image. While Ubuntu Mate features a nicer graphical environment it does however not currently offer a headless installation.
 
-> #### Note::Headless Installation
->
-> A headless machine is a machine without a keyboard, mouse and monitor. This means you need to be able to boot the machine to a state where you can remotely access it to finish the installation/configuration process.
 
-While the instructions below on how to boot the Raspberry Pi are based on Raspbian, they are very similar for most other distributions.
 
-## Creating a bootable SD card
 
-You can download the latest image of Raspbian via the Raspberry Pi website ([https://www.raspberrypi.org/downloads/](https://www.raspberrypi.org/downloads/)). Make sure to pick the "Raspbian Jessie Lite" edition. Extract the compressed file on your local disk (using 7-Zip or a similar tool). You should get an image file (.img extension).
 
-The current version at the moment of this writing is of May with a Linux kernel version of 4.4. You can always check out the release notes on [http://downloads.raspberrypi.org/raspbian/release_notes.txt](http://downloads.raspberrypi.org/raspbian/release_notes.txt). Do note that the lite edition does not include a graphical desktop environment. If this is required than download the normal image.
 
-To boot this Linux distribution we will need to write the image file to an SD card of at least 4GB. A popular tool to write the image to an SD card is "Win32 Disk Imager" which can be downloaded at [http://sourceforge.net/projects/win32diskimager](http://sourceforge.net/projects/win32diskimager)
 
-> #### Note::Other host operating systems
->
-> Check out [http://www.raspberrypi.org/documentation/installation/installing-images/README.md](http://www.raspberrypi.org/documentation/installation/installing-images/README.md) for instructions for different host operating systems such as Linux or Mac.
 
-Select the correct device letter and load the Linux image from your local drive as shown in the image below. If you're ready, hit the write button and grab a cup of coffee. You can also create a backup of your current SD card by reading from the SD card to an image file. Just make sure to select a new image file name. Do take note that the img file will have the size of your SD card. So using an SD card of 32GB will result in a backup image of 32GB.
 
-![Win32 Disk Imager](img/win32_disk_imager.png)
 
-Once the write process is finished you can remove the SD card and plug it in the Raspberry Pi. Just make sure to disconnect the power before inserting the SD card.
 
-If you want your Pi to be connected to your local area network (LAN), you will have to plug in the Ethernet cable before booting the Pi. The Pi is default configured to acquire an IP address using DHCP.
 
-## Interacting with the Raspberry Pi
+
+
+
+
+
+
+
+
+
+## Connecting to the the Raspberry Pi
 
 Booting the Raspberry Pi is really simple. All you have to do is fit in the SD card and plug in the supply adapter. It automatically boots from the SD card. Interacting with the Linux operating system from that point on can be a bit harder in certain situations.
 
@@ -53,21 +35,124 @@ If you deployed an OS such as Raspbian than you can attach an HDMI display or RC
 
 ![Raspbian TTY Terminal](img/raspbian_tty.png)
 
-> #### Warning::TODO
->
-> Jump to Section 3.3 to configure the Pi for initial use by means of the configuration menu.
+### UART Connection
+
+An other option that can be used to connect to the Raspberry Pi is using a serial connection. This is often used for debugging embedded systems because it is a very basic connection type. Because of this the kernel will also output its kernel messages (debugging information and errors) to this connection.
+
+Most computers these days lack an external serial interface. Therefore a simple RS232 to USB converter such as the PL-2303HX (see https://www.adafruit.com/datasheets/PL2303HX.pdf for datasheet) can be used. An even easier option is to use the PiUART of AdaFruit [https://www.adafruit.com/product/3589](https://www.adafruit.com/product/3589). This is a simple shield that enables us to connect to the serial terminal of the Raspberry Pi via USB.
+
+![PiUART AdaFruit](img/piuart_adafruit.jpg)
+
+Before starting make sure that the power switch of the PiUART is in the **off mode**. This is only for low-power devices such as the Raspberry Pi Zero. The Raspberry Pi 3 needs to be externally powered. Attach the module to the computer and if needed install the driver for the COM device from [https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers).
+
+![PiUART COM device](img/com_device.png)
+
+Next the UART needs to be enabled and Bluetooth needs to be disabled. This is because the Bluetooth module is currently connected via the serial port. To configure this open '/boot/config.txt' for editing, and add the lines `enable_uart=1` and `dtoverlay=pi3-disable-bt` to the file. Ensure that the line `enable_uart=0` is not present. This enables the ttyS0 serial port on the GPIO pins 8 and 10. It also disables the Bluetooth module and fixes the Pi 3's problem of the changing baud rates on the port.
+
+```text
+# Enable the serial port
+enable_uart=1
+
+# Disable bluetooth
+dtoverlay=pi3-disable-bt
+```
+
+{% hint style="note" %}
+**Disable the serial TTY**
+
+If you wish to disable the serial TTY and not allow logins via this interface you will need to undo the previous steps. To remove the TTY from the serial port you also need to edit `/boot/cmdline.txt` and remove the `console=serial0, 115200` section from the file. Do not split the line when editing, the file must only contain one line. The line should still contain `console=tty1`. This prevents Linux from outputting the boot messages on the serial port, and expecting a log in on the serial port. 
+{% endhint %}
+
+#### Terminal Emulator
+
+Next we need an application such as Putty which has a built in terminal emulator. Just select "serial" as connection type, "COMx" (where x is an integer number) as serial line and "115200" as speed. An example is shown in the figure below. Choose open and you will a get a command line interface similar to the one of SSH.
+
+![Serial line connection parameters](img/serial_to_usb_parameters.png)
+
+{% hint style="note" %}
+**Determining the COM device**
+
+You can find the COM port number in the device manager. Select the "Ports (COM & LPT)" category and look for a "Silicon Labs CP210x USB to UART Bridge (COMx)" device.
+
+![Silicon Labs CP210x USB to UART Bridge (COMx)](img/com_device.png)
+{% endhint %}
+
+If you reboot your Raspberry Pi at this moment you will see the kernel messages shown in the next figure mentioned earlier.
+
+![Kernel messages on serial interface](img/kernel_messages_serial_interface.png)
+
+Once connected you can then 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### SSH Connection
 
-Raspbian comes default with the SSH daemon enabled. This allows us to connect to the Pi from a remote computer using the SSH protocol. Before we can do this we will have to determine the IP address of the Pi. In case of a home network you can log on to your router and look for the last IP address that was given by your DHCP server running on the router.
+SSH or Secure SHell is a secure way to connect to a device and execute commands from a distance. In the old days **Telnet** was the way to go but it sends all commands and login information as **clear text**. With **SSH everything is encrypted**. Default SSH daemon listen on port 22.
 
-> #### Note::SSH
->
-> SSH or Secure Shell is a secure way to connect to a device and execute commands from a distance. In the old days Telnet was the way to go but it sends all commands and login information as clear text. With SSH everything is encrypted. Default SSH daemon listen on port 22. See chapter xxxx for more information on SSH.
+Raspbian used to come with the SSH daemon enabled by default. However, because of security reasons the SSH daemon is now disabled by default. To enable SSH on a headless setup, a file called `ssh` (without any extension) has to be created onto the boot partition of the SD card. This needs to be done prior to the first time you boot the RPi. Once the SD card has been booted, this approach will not work anymore.
+
+![Enabling the SSH daemon on boot](img/enabling_ssh_daemon.png)
+
+#### The IP Address
+
+The SSH daemon allows us to connect to the Pi from a remote computer using the SSH protocol. Before we can do this we will have to determine the IP address of the Pi.
+
+
+
+
+
+
+In case of a home network you can log on to your router and look for the last IP address that was given by your DHCP server running on the router.
 
 Another option can be a network scan tool such as SoftPerfect Network Scanner (can be downloaded from [http://www.softperfect.com/products/networkscanner/](http://www.softperfect.com/products/networkscanner/)) which allows you to scan a range of IP addresses and display some basic information about them such as the MAC (Media Access Control) address and the hostname.
 
-This would not be an option in a LAB if there are 12 Pi's connected to the same subnet all with the default configuration of Raspbian. This problem can be solved by injecting the rpi-hello script into the Raspbian image. See the last section of this chapter for more info.
+This would not be an option in a LAB if there are 20 Pi's connected to the same subnet all with the default configuration of Raspbian.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This problem can be solved by injecting the rpi-hello script into the Raspbian image. See the last section of this chapter for more info.
 
 ![Network scan using SoftPerfect Network Scanner](img/network_scan.png)
 
@@ -97,29 +182,31 @@ One of the most useful commands you should remember is the `ifconfig` command wh
 
 ![Output of the ifconfig command](img/cli_ifconfig.png)
 
-### RS232 Connection
 
-A last option that can be used to connect to the Raspberry Pi is using a serial connection. This is often used for debugging embedded systems because it is a very basic connection type. Because of this the kernel will also output its kernel messages (debugging information and errors) to this connection. Since most computers these days lack the serial interface we can use a simple RS232 to USB converter such as the PL-2303HX (see https://www.adafruit.com/datasheets/PL2303HX.pdf for datasheet).
 
-To attach the converter we do have to take a look at the pinout of the GPIO connector on the Raspberry Pi board, shown in the figure below.
 
-![Raspberry Pi 2 GPIO pinout](img/raspberry_pi2_pinout.png)
 
-The serial-to-USB converter has three pins that need to be connected to the UART of the Pi. A Tx (transmit), an Rx (receive) and a GND (ground) pin. To allow communication with the Raspberry Pi 2 the Tx of the Pi has to be connected with the Rx of the converter, while the Rx of the Pi has to be connected with the Tx of the converter. The GND pin of the converter needs to be connected to a GND pin of the Pi. Do **NOT** connect the 3V3 or 5V pin of the connector to the Pi! The necessary connections are shown in the figure below.
 
-![Connecting the PLX2303HX to UART0 of the Raspberry Pi 2](img/rs232_connection_pi2.png)
 
-Just as with SSH, you can use Putty for the serial terminal. Just select "serial" as connection type, "COMx" (where x is an integer number) as serial line and "115200" as speed. An example is shown in the figure below. Choose open and you will a get a command line interface similar to the one of SSH.
 
-![Serial line connection parameters](img/serial_to_usb_parameters.png)
 
-> #### Note::Determining the COM device
->
-> You can find the COM port number in the device manager. Select the "Ports (COM & LPT)" category and look for a "USB-to-Serial Comm Port (COMx)" device.
 
-If you reboot your Raspberry Pi at this moment you will see the kernel messages shown in the next figure mentioned earlier.
 
-![Kernel messages on serial interface](img/kernel_messages_serial_interface.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Checking the Kernel Messages
 
