@@ -117,7 +117,7 @@ Just select "serial" as connection type, "COMx" (where x is an integer number) a
 You can find the COM port number in the device manager. Select the "Ports (COM & LPT)" category and look for a "Silicon Labs CP210x USB to UART Bridge (COMx)" device. When using a different USB to serial port bridge adapter, the name might differ but it will always show up as a device in that category with a specific COM-port id.
 {% endhint %}
 
-Now connect the shield to the Raspberry Pi, plug in the SD card and the power supply and watch the kernel messages flash by. You will be served a login prompt requesting a username and password. The default username and password can be found on the Raspberry Pi website. For Raspbian it is `pi` as username and `raspberry` as password. Once you login with these credentials you are presented with the command line interface. From this point on you can start to execute commands on the Pi.
+Now connect the shield to the Raspberry Pi, plug in the SD card and an Ethernet cable (RPi is configured to use DHCP by default) and the power supply and watch the kernel messages flash by. You will be served a login prompt requesting a username and password. The default username and password can be found on the Raspberry Pi website. For Raspbian it is `pi` as username and `raspberry` as password. Once you login with these credentials you are presented with the command line interface. From this point on you can start to execute commands on the Pi.
 
 {% hint style="warning" %}
 **Default Logins**
@@ -204,3 +204,97 @@ The first time you connect to your RPi, Putty will warn you that the host you ar
 ![SSH warning unknown remote](img/putty_unknown_host.png)
 
 Once connected, you will be presented with the command line interface (CLI) of the Linux operating system running on your device.
+
+Nice to know is that compared to a serial connection, multiple SSH connections to the same host can be made. Just launch Putty again or even simpler, right click on an existing session and hit `Dusplicate Session`.
+
+#### Network Scanning
+
+When connecting to the Raspberry Pi via SSH we need it's IP address. However, it is not always possible or practical to connect a serial console bridge to the Raspberry PI every time you need to know it's IP address. Depending on the situation, some of the following options are available:
+
+* Setup a static IP address: this is perfectly possible for a production device or for a home device. However here in the LAB it is sure to provide conflicts between students choosing the same IP address.
+* DHCP combined with MAC-reservation: basically the router is configured to give certain IP address to hosts with a given MAC address. This means that the same host (same MAC) will always get the same IP address. Not really an option for the LAB as we do not have access to the router supplying the IP addresses.
+* Sniffing traffic: a sniffer such as WireShark can be used to monitor the traffic on the local network, especially the DHCP traffic which distributes IP addresses to the connected client devices. This way you can also identify what IP address is given to your device (if you know the MAC address of your device).
+* DHCP logs: in case of a home network you can log on to your router and look for the last IP address that was given by your DHCP server running on the router.
+* Network scanner: a network scan tool such as SoftPerfect Network Scanner (can be downloaded from [http://www.softperfect.com/products/networkscanner/](http://www.softperfect.com/products/networkscanner/)) allows you to scan a range of IP addresses and display some basic information about them such as the MAC (Media Access Control) address and the hostname.
+* Network mapper: using nmap to perform a network scan of the local network. This is similar to the previous option, except for the fact that `nmap` is a linux command line tool that is also available for windows.
+* Network broadcast: one could also inject a script into the original image of Raspbian with a unique id that identifies itself on the network. More on this option later.
+* ...
+
+{% hint style="note" %}
+**Nmap**
+
+Nmap (Network Mapper) is a free and open-source security scanner, originally written by Gordon Lyon (also known by his pseudonym Fyodor Vaskovich),[2] used to discover hosts and services on a computer network, thus building a "map" of the network. To accomplish its goal, Nmap sends specially crafted packets to the target host(s) and then analyzes the responses. For Windows it can be downloaded at [https://nmap.org/](https://nmap.org/).
+{% endhint %}
+
+Most of the previous approaches are not feasible in a LAB environment with many RPi's running. For now the best option is to use a network scanner such as `nmap`. To be able to identify your Raspberry Pi, you will need to know the physical layer address, aka the MAC address.
+
+Nmap is quite an extensive tool. However the syntax for a simple network scan is very straightforward:
+
+```shell
+nmap -sn 10.0.0.0/24
+...
+Nmap scan report for 10.0.0.106
+Host is up (0.046s latency).
+MAC Address: B8:27:EB:A8:49:FF (Raspberry Pi Foundation)
+...
+Nmap scan report for 10.0.0.108
+Host is up (0.13s latency).
+MAC Address: B8:27:EB:A7:81:28 (Raspberry Pi Foundation)
+...
+Nmap scan report for 10.0.0.172
+Host is up (0.00s latency).
+MAC Address: B8:27:EB:B0:1C:5E (Raspberry Pi Foundation)
+...
+```
+
+Where `sn` indicates a ping scan with port scan disabled, `10.0.0.0` is the network address and `24` is the subnet mask. Keep your eyes open for `Raspberry Pi Foundation` devices.
+
+If you have git installed with the most common linux tools, than you should also be able to `grep`. Try the following command:
+
+```shell
+nmap -sn 10.0.0.0/24 | grep -B 2 -i 'raspberry'
+
+Nmap scan report for 10.0.0.106
+Host is up (0.11s latency).
+MAC Address: B8:27:EB:A8:49:FF (Raspberry Pi Foundation)
+--
+Nmap scan report for 10.0.0.108
+Host is up (0.094s latency).
+MAC Address: B8:27:EB:A7:81:28 (Raspberry Pi Foundation)
+--
+Nmap scan report for 10.0.0.172
+Host is up (0.00s latency).
+MAC Address: B8:27:EB:B0:1C:5E (Raspberry Pi Foundation)
+```
+
+This command will execute a network scan and pipe the result to grep, which will filter out the lines containing `raspberry` - matching case insensitive. If a match is found, the match is printed with 2 lines leading before the match.
+
+## Checking the Kernel Messages
+
+While the RS232 connection will automatically show the kernel messages while booting, you can also retrieve the output from an SSH connection by using the `dmesg` (display messages) command below:
+
+```shell
+dmesg
+```
+
+This outputs the kernel messages to your current terminal.
+
+When initially booted, a computer system loads its kernel into memory. At this stage device drivers present in the kernel are set up to drive relevant hardware. Such drivers, as well as other elements within the kernel, may produce output ("messages") reporting both the presence of modules and the values of any parameters adopted. (It may be possible to specify boot parameters which control the level of detail in the messages.) The booting process typically happens at a speed where individual messages scroll off the top of the screen before an operator can read/digest them. The `dmesg` command allows the review of such messages in a controlled manner after the system has started.
+
+Even after the system has fully booted, the kernel may occasionally produce further diagnostic messages. Common examples of when this might happen are when I/O devices encounter errors, or USB devices are hot-plugged.
+
+The output of dmesg can amount to many complete screens. For this reason, this output is normally reviewed using standard text-manipulation tools such as more, tail, less or grep. The output is often captured in a permanent system logfile via a logging daemon, such as syslog.
+
+You can try using the `dmesg` command piped to the `more` command:
+
+```shell
+dmesg | more
+```
+
+You can advance line per line using `ENTER` or block per block by using `SPACEBAR`.
+
+{% hint style="note" %}
+**Piping**
+
+By using the pipe operator `|`, data can be send from one program to another. What this operator does is feed the output from the program on the left as input to the program on the right.
+{% endhint %}
