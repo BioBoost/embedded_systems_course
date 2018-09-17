@@ -298,3 +298,12 @@ You can advance line per line using `ENTER` or block per block by using `SPACEBA
 
 By using the pipe operator `|`, data can be send from one program to another. What this operator does is feed the output from the program on the left as input to the program on the right.
 {% endhint %}
+
+## Update the System
+
+It is important to keep your systems up-to-date, especially security related updates should be deployed periodically. To update your RPi to the latest version run the commands below:
+
+```shell
+sudo apt-get update
+sudo apt-get upgrade
+```
