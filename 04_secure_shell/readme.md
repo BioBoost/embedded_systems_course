@@ -1,4 +1,6 @@
-<!-- toc -->
+---
+description: Brief introduction into Secure Shell - the safe way to remotely connect to another host.
+---
 
 # Secure Shell
 
@@ -14,7 +16,7 @@ SSH, which is an acronym for Secure SHell, was designed and created to provide t
 
 The example above shows how the data in an encrypted connection like SSH is encrypted on the network and so cannot be read by anyone who doesn't have the session-negotiated keys, which is just a fancy way of saying the data is scrambled. The server still can read the information, but only after negotiating the encrypted session with the client.
 
-> #### Note::Scrambled
+> **HINT** - **Scrambled**
 >
 > When I say scrambled, I don't mean like the old cable pay channels where you can still kinda see things and hear the sound, I mean really scrambled. Usually encryption means that the data has been changed to such a degree that unless you have the key, its really hard to crack the code with a computer. It will take on the order of years for commonly available computer hardware to crack the encrypted data. The premise being that by the time you could crack it, the data is worthless.
 
@@ -49,7 +51,7 @@ Whenever you connect via ssh to a host that has your public key loaded in the au
 To generate a public and private key pair enter the following command:
 
 ```shell
-$ ssh-keygen -t rsa
+$ ssh-keygen -t rsa -C myname@laptop
 ```
 
 It will prompt you for the location of the keyfile. Unless you have already created a keyfile in the default location, you can accept the default by pressing 'enter'.
@@ -78,7 +80,7 @@ $ mkdir ~/.ssh && cd ~/.ssh
 
 Now open the `authorized_keys` file using nano. If it is already present we will add our new public key, otherwise it will automatically create a new file. Open your public key file on your development machine (can be accomplished using `cat ~/.ssh/id_rsa.pub`) and copy the content. Paste the content in the `authorized_keys` as a new line and save it (CTRL-O to save and CTRL-X te exit).
 
-If you had to create the directory of the file you will need to restrict the permissions of both. This is because SSH is so secure that it requires your authorized_keys to be only readabe and writeable by the owner of the file. Even the `.ssh` directory cannot be readable or writable by anybody else. To fix this execute the change mode command using the following arguments:
+If you had to create the directory of the file you will need to restrict the permissions of both. This is because SSH is so secure that it requires your authorized_keys to be only readable and writable by the owner of the file. Even the `.ssh` directory cannot be readable or writable by anybody else. To fix this execute the change mode command using the following arguments:
 
 ```shell
 $ chmod -R 600 ~/.ssh

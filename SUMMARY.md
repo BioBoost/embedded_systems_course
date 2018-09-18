@@ -11,6 +11,11 @@
 * [RPi Operating System](03_rpi_operating_system/readme.md)
 * [Challenges](03_rpi_operating_system/challenges.md)
 
+### Secure Shell
+
+* [Secure Shell](04_secure_shell/readme.md)
+* [Challenges](04_secure_shell/challenges.md)
+
 ----
 
 ### Sources
