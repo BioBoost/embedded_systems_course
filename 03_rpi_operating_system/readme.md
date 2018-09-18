@@ -17,11 +17,9 @@ The Raspberry Pi foundation provides several ready to use operating system image
 
 For this course we will be using the Raspbian image. While Ubuntu Mate features a nicer graphical environment it does however not currently offer a headless installation.
 
-{% hint style="note" %}
-**Headless Installation**
-
-A headless machine is a machine without a keyboard, mouse or monitor. This means you need to be able to boot the machine to a state where you can remotely access it to finish the installation/configuration process.
-{% endhint %}
+> **HINT** - **Headless Installation**
+>
+> A headless machine is a machine without a keyboard, mouse or monitor. This means you need to be able to boot the machine to a state where you can remotely access it to finish the installation/configuration process.
 
 While the instructions further are based on how to equip the Raspberry Pi with Raspbian, they are very similar for most other distributions.
 
@@ -33,11 +31,9 @@ The current Raspbian version at the moment of this writing is of June with a Lin
 
 To boot the Linux distribution, the image needs to be written to an SD card of at least 4GB. A popular tool to write the an image to an SD card is **Etcher** which can be downloaded at [https://etcher.io/](https://etcher.io/).
 
-{% hint style="note" %}
-**Other host operating systems**
-
-Check out [http://www.raspberrypi.org/documentation/installation/installing-images/README.md](http://www.raspberrypi.org/documentation/installation/installing-images/README.md) for instructions on deploying the image to an SD card when using a different host operating system such as Linux or Mac.
-{% endhint %}
+> **HINT** - **Other host operating systems**
+>
+> Check out [http://www.raspberrypi.org/documentation/installation/installing-images/README.md](http://www.raspberrypi.org/documentation/installation/installing-images/README.md) for instructions on deploying the image to an SD card when using a different host operating system such as Linux or Mac.
 
 Make sure to select the correct device letter as a target and load the Linux image from your local drive as shown in the image below. If you're ready, hit the flash button and grab a cup of coffee.
 
@@ -45,11 +41,9 @@ Make sure to select the correct device letter as a target and load the Linux ima
 
 Once the write process is finished you can remove the SD card from the computer. Do not plug it into the Raspberry Pi just yet.
 
-{% hint style="note" %}
-**SD Card Backups**
-
-You can also create a backup of your current SD card by reading from the SD card to an image file. For this you will need another tool such as *Win32 Disk Imager*, which can be downloaded at [https://sourceforge.net/projects/win32diskimager](https://sourceforge.net/projects/win32diskimager). Just make sure to select a new image file name. Do take note that the image file will have the size of your SD card. So using an SD card of 32GB will result in a backup image of 32GB. When using MAC or Linux, `dd` can also be used to write and read images to and from the SD card.
-{% endhint %}
+> **HINT** - **SD Card Backups**
+>
+> You can also create a backup of your current SD card by reading from the SD card to an image file. For this you will need another tool such as *Win32 Disk Imager*, which can be downloaded at [https://sourceforge.net/projects/win32diskimager](https://sourceforge.net/projects/win32diskimager). Just make sure to select a new image file name. Do take note that the image file will have the size of your SD card. So using an SD card of 32GB will result in a backup image of 32GB. When using MAC or Linux, `dd` can also be used to write and read images to and from the SD card.
 
 ## Connecting to the the Raspberry Pi
 
@@ -91,39 +85,31 @@ enable_uart=1
 dtoverlay=pi3-disable-bt
 ```
 
-{% hint style="note" %}
-**Disable the serial TTY**
-
-If you wish to disable the serial tty and not allow logins via this interface you will need to undo the previous steps. To remove the tty from the serial port you also need to edit `/boot/cmdline.txt` and remove the `console=serial0,115200` section from the file. Do not split the line when editing, the file must only contain one line. The line should still contain `console=tty1`. This prevents Linux from outputting the boot messages on the serial port, and expecting a log in on the serial port. Disabling tty's on serial interfaces is a good security feature when deploying devices in the fields so the user cannot gain access to the terminal.
-{% endhint %}
+> **HINT** - **Disable the serial TTY**
+>
+> If you wish to disable the serial tty and not allow logins via this interface you will need to undo the previous steps. To remove the tty from the serial port you also need to edit `/boot/cmdline.txt` and remove the `console=serial0,115200` section from the file. Do not split the line when editing, the file must only contain one line. The line should still contain `console=tty1`. This prevents Linux from outputting the boot messages on the serial port, and expecting a log in on the serial port. Disabling tty's on serial interfaces is a good security feature when deploying devices in the fields so the user cannot gain access to the terminal.
 
 #### Terminal Emulator
 
 Next a terminal emulator that supports serial port connections, such as Putty, is required.
 
-{% hint style="note" %}
-**Putty**
-
-PuTTY is a free implementation of Telnet and SSH for Windows and Unix platforms, along with an xterm terminal emulator. It can be downloaded from [http://www.chiark.greenend.org.uk/~sgtatham/putty](http://www.chiark.greenend.org.uk/~sgtatham/putty).
-{% endhint %}
+> **HINT** - **Putty**
+>
+> PuTTY is a free implementation of Telnet and SSH for Windows and Unix platforms, along with an xterm terminal emulator. It can be downloaded from [http://www.chiark.greenend.org.uk/~sgtatham/putty](http://www.chiark.greenend.org.uk/~sgtatham/putty).
 
 Just select "serial" as connection type, "COMx" (where x is an integer number) as serial line and "115200" as the speed. An example is shown in the image below. Choose open and you will a get a command line interface.
 
 ![Serial line connection parameters](img/serial_to_usb_parameters.png)
 
-{% hint style="note" %}
-**Determining the COM device**
-
-You can find the COM port number in the device manager. Select the "Ports (COM & LPT)" category and look for a "Silicon Labs CP210x USB to UART Bridge (COMx)" device. When using a different USB to serial port bridge adapter, the name might differ but it will always show up as a device in that category with a specific COM-port id.
-{% endhint %}
+> **HINT** - **Determining the COM device**
+>
+> You can find the COM port number in the device manager. Select the "Ports (COM & LPT)" category and look for a "Silicon Labs CP210x USB to UART Bridge (COMx)" device. When using a different USB to serial port bridge adapter, the name might differ but it will always show up as a device in that category with a specific COM-port id.
 
 Now connect the shield to the Raspberry Pi, plug in the SD card and an Ethernet cable (RPi is configured to use DHCP by default) and the power supply and watch the kernel messages flash by. You will be served a login prompt requesting a username and password. The default username and password can be found on the Raspberry Pi website. For Raspbian it is `pi` as username and `raspberry` as password. Once you login with these credentials you are presented with the command line interface. From this point on you can start to execute commands on the Pi.
 
-{% hint style="warning" %}
-**Default Logins**
-
-Default logins should always be changed. Remember the news item on a bot network consisting of 100th of thousands of IoT devices. They were all equipped with default usernames and passwords. The default password can be changed using the Linux `passwd` command.
-{% endhint %}
+> **WARNING** - **Default Logins**
+>
+> Default logins should always be changed. Remember the news item on a bot network consisting of 100th of thousands of IoT devices. They were all equipped with default usernames and passwords. The default password can be changed using the Linux `passwd` command.
 
 One of the most useful commands you should remember is the `ifconfig` command which displays the current network interfaces and their configuration parameters. If you execute the command you should get a similar output to the one shown below. Try to identify the IPv4, IPv6 address and MAC address of the primary Ethernet interface (eth0).
 
@@ -183,11 +169,10 @@ pi@raspberrypi:~$ sudo service ssh status
 
 The SSD daemon should be `active (running)`.
 
-{% hint style="info" %}
-**Raspi Config Tool**
 
-The raspi-config tool helps you to configure your Raspberry Pi; several settings can be changed with this tool without having to know the correct commands to use. It is written as a bash script, run in a terminal window, and uses whiptail (whiptail is a "dialog" replacement using *newt* instead of *ncurses*, see "man whiptail") to create the windows, menus and messages. Some changes require "administrator" permissions, so the tool must be run using `sudo`.
-{% endhint %}
+> **HINT** - **Raspi Config Tool**
+>
+> The raspi-config tool helps you to configure your Raspberry Pi; several settings can be changed with this tool without having to know the correct commands to use. It is written as a bash script, run in a terminal window, and uses whiptail (whiptail is a "dialog" replacement using *newt* instead of *ncurses*, see "man whiptail") to create the windows, menus and messages. Some changes require "administrator" permissions, so the tool must be run using `sudo`.
 
 Feel free to explore the options in rasp-config. It also allows you to configure the keyboard layout, WiFi settings, ...
 
@@ -220,11 +205,9 @@ When connecting to the Raspberry Pi via SSH we need it's IP address. However, it
 * Network broadcast: one could also inject a script into the original image of Raspbian with a unique id that identifies itself on the network. More on this option later.
 * ...
 
-{% hint style="note" %}
-**Nmap**
-
-Nmap (Network Mapper) is a free and open-source security scanner, originally written by Gordon Lyon (also known by his pseudonym Fyodor Vaskovich),[2] used to discover hosts and services on a computer network, thus building a "map" of the network. To accomplish its goal, Nmap sends specially crafted packets to the target host(s) and then analyzes the responses. For Windows it can be downloaded at [https://nmap.org/](https://nmap.org/).
-{% endhint %}
+> **HINT** - **Nmap**
+>
+> Nmap (Network Mapper) is a free and open-source security scanner, originally written by Gordon Lyon (also known by his pseudonym Fyodor Vaskovich),[2] used to discover hosts and services on a computer network, thus building a "map" of the network. To accomplish its goal, Nmap sends specially crafted packets to the target host(s) and then analyzes the responses. For Windows it can be downloaded at [https://nmap.org/](https://nmap.org/).
 
 Most of the previous approaches are not feasible in a LAB environment with many RPi's running. For now the best option is to use a network scanner such as `nmap`. To be able to identify your Raspberry Pi, you will need to know the physical layer address, aka the MAC address.
 
@@ -293,11 +276,9 @@ dmesg | more
 
 You can advance line per line using `ENTER` or block per block by using `SPACEBAR`.
 
-{% hint style="note" %}
-**Piping**
-
-By using the pipe operator `|`, data can be send from one program to another. What this operator does is feed the output from the program on the left as input to the program on the right.
-{% endhint %}
+> **HINT** - **Piping**
+>
+> By using the pipe operator `|`, data can be send from one program to another. What this operator does is feed the output from the program on the left as input to the program on the right.
 
 ## Update the System
 
