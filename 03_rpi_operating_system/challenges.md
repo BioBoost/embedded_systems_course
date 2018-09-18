@@ -12,6 +12,10 @@ Connect to your Raspberry Pi via SSH.
 
 Update the system.
 
+### Static IP Address
+
+Give your Raspberry Pi a static IP address. Search the Internet on how to do this.
+
 ### Setup a WebServer
 
 Setup a webserver on your Raspberry Pi. You can follow this online tutorial: [https://thepi.io/how-to-set-up-a-web-server-on-the-raspberry-pi/](https://thepi.io/how-to-set-up-a-web-server-on-the-raspberry-pi/).

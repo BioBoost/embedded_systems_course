@@ -196,13 +196,13 @@ Nice to know is that compared to a serial connection, multiple SSH connections t
 
 When connecting to the Raspberry Pi via SSH we need it's IP address. However, it is not always possible or practical to connect a serial console bridge to the Raspberry PI every time you need to know it's IP address. Depending on the situation, some of the following options are available:
 
-* Setup a static IP address: this is perfectly possible for a production device or for a home device. However here in the LAB it is sure to provide conflicts between students choosing the same IP address.
-* DHCP combined with MAC-reservation: basically the router is configured to give certain IP address to hosts with a given MAC address. This means that the same host (same MAC) will always get the same IP address. Not really an option for the LAB as we do not have access to the router supplying the IP addresses.
-* Sniffing traffic: a sniffer such as WireShark can be used to monitor the traffic on the local network, especially the DHCP traffic which distributes IP addresses to the connected client devices. This way you can also identify what IP address is given to your device (if you know the MAC address of your device).
-* DHCP logs: in case of a home network you can log on to your router and look for the last IP address that was given by your DHCP server running on the router.
-* Network scanner: a network scan tool such as SoftPerfect Network Scanner (can be downloaded from [http://www.softperfect.com/products/networkscanner/](http://www.softperfect.com/products/networkscanner/)) allows you to scan a range of IP addresses and display some basic information about them such as the MAC (Media Access Control) address and the hostname.
-* Network mapper: using nmap to perform a network scan of the local network. This is similar to the previous option, except for the fact that `nmap` is a linux command line tool that is also available for windows.
-* Network broadcast: one could also inject a script into the original image of Raspbian with a unique id that identifies itself on the network. More on this option later.
+* **Setup a static IP address**: this is perfectly possible for a production device or for a home device. However here in the LAB it is sure to provide conflicts between students choosing the same IP address.
+* **DHCP combined with MAC-reservation**: basically the router is configured to give certain IP address to hosts with a given MAC address. This means that the same host (same MAC) will always get the same IP address. Not really an option for the LAB as we do not have access to the router supplying the IP addresses.
+* **Sniffing traffic**: a sniffer such as WireShark can be used to monitor the traffic on the local network, especially the DHCP traffic which distributes IP addresses to the connected client devices. This way you can also identify what IP address is given to your device (if you know the MAC address of your device).
+* **DHCP logs**: in case of a home network you can log on to your router and look for the last IP address that was given by your DHCP server running on the router.
+* **Network scanner**: a network scan tool such as SoftPerfect Network Scanner (can be downloaded from [http://www.softperfect.com/products/networkscanner/](http://www.softperfect.com/products/networkscanner/)) allows you to scan a range of IP addresses and display some basic information about them such as the MAC (Media Access Control) address and the hostname.
+* **Network mapper**: using nmap to perform a network scan of the local network. This is similar to the previous option, except for the fact that `nmap` is a linux command line tool that is also available for windows.
+* **Network broadcast**: one could also inject a script into the original image of Raspbian with a unique id that identifies itself on the network. More on this option later.
 * ...
 
 > **HINT** - **Nmap**
