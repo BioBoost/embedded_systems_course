@@ -10,11 +10,17 @@ Setup a serial connection with the Raspberry Pi and determine it's MAC and IP ad
 
 Connect to your Raspberry Pi via SSH.
 
-Update the system.
+Update the system and change the password of the `pi` user.
+
+Search the Internet on how to change the hostname of the device. Give it a sensible name.
 
 ### Static IP Address
 
 Give your Raspberry Pi a static IP address. Search the Internet on how to do this.
+
+Some **points of attention**:
+* Ask the lector for IP ranges in the lab's you can use
+* Make sure to come to an agreement with the others students in the class.
 
 ### Setup a WebServer
 
