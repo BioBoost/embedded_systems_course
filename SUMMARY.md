@@ -16,6 +16,11 @@
 * [Secure Shell](04_secure_shell/readme.md)
 * [Challenges](04_secure_shell/challenges.md)
 
+### Developing apps for the RPi
+
+* [Developing apps for the RPi](05_developing_apps_for_rpi/readme.md)
+* [Challenges](05_developing_apps_for_rpi/challenges.md)
+
 ----
 
 ### Sources
