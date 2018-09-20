@@ -6,30 +6,30 @@ description: Introduces operating systems for the Raspberry Pi. Next is shown ho
 
 The Raspberry Pi foundation provides several ready to use operating system images for the Pi. At the moment of this writing the following are available:
 
-* Raspbian - The Foundation's official supported operating system (Debian Jessie)
-* Ubuntu Mate - Official Ubuntu flavor featuring the MATE desktop
-* Snappy Ubuntu Core - A new, transactionally-updated Ubuntu for IoT devices, clouds and more
-* OSMC - Open Source Media Centre
-* OPENELEC - Open Embedded Linux Entertainment Centre
-* PINET - Raspberry Pi Classroom Management Solution
-* Windows 10 IoT Core
-* RISC OS - A non-Linux distribution
+* **Raspbian** - The Foundation's official supported operating system (Debian Jessie)
+* **Ubuntu Mate** - Official Ubuntu flavor featuring the MATE desktop
+* **Snappy Ubuntu Core** - A new, transactionally-updated Ubuntu for IoT devices, clouds and more
+* **OSMC** - Open Source Media Centre
+* **OPENELEC** - Open Embedded Linux Entertainment Centre
+* **PINET** - Raspberry Pi Classroom Management Solution
+* **Windows 10 IoT Core**
+* **RISC OS** - A non-Linux distribution
 
-For this course we will be using the Raspbian image. While Ubuntu Mate features a nicer graphical environment it does however not currently offer a headless installation.
+For this course we will be using the Raspbian image. While Ubuntu Mate features a nicer graphical environment it does however not currently offer a headless installation. On top of that we actually won't need the graphical desktop environment.
 
 > **HINT** - **Headless Installation**
 >
 > A headless machine is a machine without a keyboard, mouse or monitor. This means you need to be able to boot the machine to a state where you can remotely access it to finish the installation/configuration process.
 
-While the instructions further are based on how to equip the Raspberry Pi with Raspbian, they are very similar for most other distributions.
+While the instructions further on are based on how to equip the Raspberry Pi with Raspbian, they are very similar for most other distributions.
 
 ## Creating a bootable SD card
 
 You can download the latest image of Raspbian via the Raspberry Pi website ([https://www.raspberrypi.org/downloads/](https://www.raspberrypi.org/downloads/)). Make sure to pick the "Raspbian Stretch Lite" edition. Extract the compressed file on your local disk (using 7-Zip or a similar tool). You should get an image file (.img extension).
 
-The current Raspbian version at the moment of this writing is of June with a Linux kernel version of 4.14. You can always check out the release notes on [http://downloads.raspberrypi.org/raspbian/release_notes.txt](http://downloads.raspberrypi.org/raspbian/release_notes.txt). The Lite edition of Raspbian is the one without a graphical desktop environment. If you were to attach a display to, all you would see would be a TTY with a login prompt. If you require a GUI, you will need to download the normal image.
+The current Raspbian version at the moment of this writing is of June with a Linux kernel version of 4.14. You can always check out the release notes on [http://downloads.raspberrypi.org/raspbian/release_notes.txt](http://downloads.raspberrypi.org/raspbian/release_notes.txt). The Lite edition of Raspbian is the one without a graphical desktop environment. If you were to attach a display to the Raspberry Pi, all you would see would be a TTY with a login prompt. If you require a GUI, you will need to download the normal image.
 
-To boot the Linux distribution, the image needs to be written to an SD card of at least 4GB. A popular tool to write the an image to an SD card is **Etcher** which can be downloaded at [https://etcher.io/](https://etcher.io/).
+To boot the Linux distribution, the image needs to be written to an SD card of at least 4GB. A popular tool to write an image to an SD card is **Etcher**, which can be downloaded at [https://etcher.io/](https://etcher.io/).
 
 > **HINT** - **Other host operating systems**
 >
@@ -39,7 +39,7 @@ Make sure to select the correct device letter as a target and load the Linux ima
 
 ![Etcher](img/etcher.png)
 
-Once the write process is finished you can remove the SD card from the computer. Do not plug it into the Raspberry Pi just yet.
+Once the write process is finished, you can remove the SD card from the computer. Do not plug it into the Raspberry Pi just yet.
 
 > **HINT** - **SD Card Backups**
 >
@@ -47,7 +47,7 @@ Once the write process is finished you can remove the SD card from the computer.
 
 ## Connecting to the the Raspberry Pi
 
-Booting the Raspberry Pi is really simple. All you have to do is fit in the SD card and plug in the supply adapter. It automatically boots from the SD card. Interacting with the Linux operating system from that point on can be a bit harder in certain situations. Before actually booting the Raspberry Pi, read through this chapter first because some necessary configurations can only be made once and that is before the SD card is used for the first time.
+Booting the Raspberry Pi is really simple. All you have to do is fit in the SD card and plug in the power supply adapter. It automatically boots from the SD card. Interacting with the Linux operating system from that point on can be a bit harder in certain situations. Before actually booting the Raspberry Pi, read through this chapter first because some necessary configurations can only be made once and that is before the SD card is used for the first time.
 
 ### A Graphical Desktop Environment
 
@@ -65,17 +65,17 @@ An other option that can be used to connect to the Raspberry Pi is using a seria
 
 ![Kernel messages on serial interface](img/kernel_messages_serial_interface.png)
 
-Most computers these days lack an external serial interface. Therefore a simple RS232 to USB converter can be used. An example is the PL-2303HX (see https://www.adafruit.com/datasheets/PL2303HX.pdf for datasheet). An even easier option is to use the PiUART of AdaFruit [https://www.adafruit.com/product/3589](https://www.adafruit.com/product/3589).
+Most computers these days lack an external serial interface. Therefore a simple RS232 to USB converter can be used. An example is the PL-2303HX (see https://www.adafruit.com/datasheets/PL2303HX.pdf for datasheet). In our case an even easier option is to use the PiUART of AdaFruit [https://www.adafruit.com/product/3589](https://www.adafruit.com/product/3589).
 
 This device allows a computer to be connected to the Raspberry Pi using a simple USB connection. The PiUART bridges both interfaces and acts as a simple COM device for the computer.
 
 ![PiUART AdaFruit](img/piuart_adafruit.jpg)
 
-Before starting make sure that the power switch of the PiUART is in the **off mode**. This is only for low-power devices such as the Raspberry Pi Zero. The Raspberry Pi 3 needs to be externally powered. Attach the module to the computer and if needed install the driver for the COM device from [https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers).
+Before starting make sure that the power switch of the PiUART is in the **off mode**. This is only for low-power devices such as the Raspberry Pi Zero. **The Raspberry Pi 3 needs to be externally powered.** Attach the module to the computer and if needed install the driver for the COM device from [https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers).
 
 ![PiUART COM device](img/com_device.png)
 
-Next the RPi UART needs to be enabled and Bluetooth module needs to be disabled. This because the Bluetooth module is currently connected via the serial interface. To configure this open `/boot/config.txt` for editing (just plug the SD card back into your computer), and add the lines `enable_uart=1` and `dtoverlay=pi3-disable-bt` to the bottom of the file. Ensure that neither of the lines are already present. This enables the ttyS0 serial port on the GPIO pins 8 and 10. It also disables the Bluetooth module thereby also fixing the Pi 3's problem of the changing baud rates on the port.
+Next the RPi UART needs to be enabled and the Bluetooth module needs to be disabled because the Bluetooth module is currently connected via the serial interface. To configure this open `/boot/config.txt` for editing (just plug the SD card back into your computer), and add the lines `enable_uart=1` and `dtoverlay=pi3-disable-bt` to the bottom of the file. Ensure that neither of the lines are already present. This enables the ttyS0 serial port on the GPIO pins 8 and 10. It also disables the Bluetooth module thereby also fixing the Pi 3's problem of the changing baud rates on the port.
 
 ```text
 # Enable the serial port
@@ -87,7 +87,7 @@ dtoverlay=pi3-disable-bt
 
 > **HINT** - **Disable the serial TTY**
 >
-> If you wish to disable the serial tty and not allow logins via this interface you will need to undo the previous steps. To remove the tty from the serial port you also need to edit `/boot/cmdline.txt` and remove the `console=serial0,115200` section from the file. Do not split the line when editing, the file must only contain one line. The line should still contain `console=tty1`. This prevents Linux from outputting the boot messages on the serial port, and expecting a log in on the serial port. Disabling tty's on serial interfaces is a good security feature when deploying devices in the fields so the user cannot gain access to the terminal.
+> If you wish to disable the serial tty and not allow logins via this interface you will need to undo the previous steps. To remove the tty from the serial port you also need to edit `/boot/cmdline.txt` and remove the `console=serial0,115200` section from the file. This prevents Linux from outputting the boot messages on the serial port, and expecting a log in on the serial port. Do not split the line when editing, the file must only contain one line. The line should still contain `console=tty1`. Disabling tty's on serial interfaces is a good security feature when deploying devices in the fields so the user cannot gain access to the terminal.
 
 #### Terminal Emulator
 
@@ -111,7 +111,7 @@ Now connect the shield to the Raspberry Pi, plug in the SD card and an Ethernet 
 >
 > Default logins should always be changed. Remember the news item on a bot network consisting of 100th of thousands of IoT devices. They were all equipped with default usernames and passwords. The default password can be changed using the Linux `passwd` command.
 
-One of the most useful commands you should remember is the `ifconfig` command which displays the current network interfaces and their configuration parameters. If you execute the command you should get a similar output to the one shown below. Try to identify the IPv4, IPv6 address and MAC address of the primary Ethernet interface (eth0).
+One of the most useful commands you should remember is the `ifconfig` command which displays the current network interfaces and their configuration parameters. If you execute the command you should get a similar output to the one shown below. Try to identify the IPv4, IPv6 address and MAC (Media Access Control) address of the primary Ethernet interface (eth0).
 
 ```shell
 pi@raspberrypi:~$ ifconfig
@@ -146,7 +146,7 @@ The other interfaces are the local loopback interface (lo) and the wireless inte
 
 ### SSH Connection
 
-SSH or Secure SHell is a secure way to connect to a device and execute commands from a remote host. In the old days **Telnet** was the way to go but it sends all commands and login information as **clear text**. With **SSH everything is encrypted**. An SSH daemon listen by default on port 22.
+SSH or **Secure SHell** is a secure way to connect to a device and execute commands from a remote host. In the old days **Telnet** was the way to go but it sends all commands and login information as **clear text**. With **SSH everything is encrypted**. An SSH daemon listens by default on port 22.
 
 Raspbian used to come with the SSH daemon enabled by default. However, because of security reasons the **SSH daemon is now disabled by default**. To enable SSH on a headless setup, a file called `ssh` (without any extension) has to be created onto the boot partition of the SD card. This needs to be done prior to the first time you boot the RPi. Once the SD card has been booted, this approach will not work anymore.
 
@@ -190,7 +190,15 @@ The first time you connect to your RPi, Putty will warn you that the host you ar
 
 Once connected, you will be presented with the command line interface (CLI) of the Linux operating system running on your device.
 
-Nice to know is that compared to a serial connection, multiple SSH connections to the same host can be made. Just launch Putty again or even simpler, right click on an existing session and hit `Dusplicate Session`.
+Nice to know is that compared to a serial connection, multiple SSH connections to the same host can be made. Just launch Putty again or even simpler, right click on an existing session and hit `Duplicate Session`.
+
+If you have the full git toolkit installed on Windows, you can also use the `ssh` command from powershell.
+
+```shell
+ssh pi@<ip_address>
+```
+
+![SSH from PowerShell](img/ssh_from_powershell.png)
 
 #### Network Scanning
 
@@ -200,16 +208,16 @@ When connecting to the Raspberry Pi via SSH we need it's IP address. However, it
 * **DHCP combined with MAC-reservation**: basically the router is configured to give certain IP address to hosts with a given MAC address. This means that the same host (same MAC) will always get the same IP address. Not really an option for the LAB as we do not have access to the router supplying the IP addresses.
 * **Sniffing traffic**: a sniffer such as WireShark can be used to monitor the traffic on the local network, especially the DHCP traffic which distributes IP addresses to the connected client devices. This way you can also identify what IP address is given to your device (if you know the MAC address of your device).
 * **DHCP logs**: in case of a home network you can log on to your router and look for the last IP address that was given by your DHCP server running on the router.
-* **Network scanner**: a network scan tool such as SoftPerfect Network Scanner (can be downloaded from [http://www.softperfect.com/products/networkscanner/](http://www.softperfect.com/products/networkscanner/)) allows you to scan a range of IP addresses and display some basic information about them such as the MAC (Media Access Control) address and the hostname.
+* **Network scanner**: a network scan tool such as SoftPerfect Network Scanner (can be downloaded from [http://www.softperfect.com/products/networkscanner/](http://www.softperfect.com/products/networkscanner/)) allows you to scan a range of IP addresses and display some basic information about them such as the MAC address and the hostname.
 * **Network mapper**: using nmap to perform a network scan of the local network. This is similar to the previous option, except for the fact that `nmap` is a linux command line tool that is also available for windows.
 * **Network broadcast**: one could also inject a script into the original image of Raspbian with a unique id that identifies itself on the network. More on this option later.
 * ...
 
+Most of the previous approaches are not feasible in a LAB environment with many RPi's running. For now the best option is to use a network scanner such as `nmap`. To be able to identify your Raspberry Pi, you will need to know the physical layer address, aka the MAC address.
+
 > **HINT** - **Nmap**
 >
-> Nmap (Network Mapper) is a free and open-source security scanner, originally written by Gordon Lyon (also known by his pseudonym Fyodor Vaskovich),[2] used to discover hosts and services on a computer network, thus building a "map" of the network. To accomplish its goal, Nmap sends specially crafted packets to the target host(s) and then analyzes the responses. For Windows it can be downloaded at [https://nmap.org/](https://nmap.org/).
-
-Most of the previous approaches are not feasible in a LAB environment with many RPi's running. For now the best option is to use a network scanner such as `nmap`. To be able to identify your Raspberry Pi, you will need to know the physical layer address, aka the MAC address.
+> Nmap (Network Mapper) is a free and open-source security scanner, originally written by Gordon Lyon (also known by his pseudonym Fyodor Vaskovich), used to discover hosts and services on a computer network, thus building a "map" of the network. To accomplish its goal, Nmap sends specially crafted packets to the target host(s) and then analyzes the responses. For Windows it can be downloaded at [https://nmap.org/](https://nmap.org/).
 
 Nmap is quite an extensive tool. However the syntax for a simple network scan is very straightforward:
 
@@ -232,7 +240,7 @@ MAC Address: B8:27:EB:B0:1C:5E (Raspberry Pi Foundation)
 
 Where `sn` indicates a ping scan with port scan disabled, `10.0.0.0` is the network address and `24` is the subnet mask. Keep your eyes open for `Raspberry Pi Foundation` devices.
 
-If you have git installed with the most common linux tools, than you should also be able to `grep`. Try the following command:
+If you are using a Windows host and have git installed with the most common linux tools, than you should also be able to `grep`. Try the following command:
 
 ```shell
 nmap -sn 10.0.0.0/24 | grep -B 2 -i 'raspberry'
@@ -257,7 +265,21 @@ This command will execute a network scan and pipe the result to grep, which will
 While the RS232 connection will automatically show the kernel messages while booting, you can also retrieve the output from an SSH connection by using the `dmesg` (display messages) command below:
 
 ```shell
-dmesg
+pi@raspberrypi:~ $ dmesg
+[    0.000000] Booting Linux on physical CPU 0xf00
+[    0.000000] Linux version 4.14.50-v7+ (dc4@dc4-XPS13-9333) (gcc version 4.9.3 (crosstool-NG crosstool-ng-1.22.0-88-g8460611)) #1122 SMP Tue Jun 19 12:2
+6:26 BST 2018
+[    0.000000] CPU: ARMv7 Processor [410fc075] revision 5 (ARMv7), cr=10c5387d
+[    0.000000] CPU: div instructions available: patching division code
+[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+[    0.000000] OF: fdt: Machine model: Raspberry Pi 2 Model B Rev 1.1
+[    0.000000] Memory policy: Data cache writealloc
+[    0.000000] cma: Reserved 8 MiB at 0x3ac00000
+[    0.000000] On node 0 totalpages: 242688
+[    0.000000] free_area_init_node: node 0, pgdat 80c85000, node_mem_map ba3a1000
+[    0.000000]   Normal zone: 2133 pages used for memmap
+[    0.000000]   Normal zone: 0 pages reserved
+[    0.000000]   Normal zone: 242688 pages, LIFO batch:31
 ```
 
 This outputs the kernel messages to your current terminal.
