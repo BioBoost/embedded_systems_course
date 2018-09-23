@@ -24,6 +24,8 @@ Some **points of attention**:
 
 ### Setup a WebServer
 
+<!-- For next year we need to make clear here that the original config should not be deleted or that the example config below should not just be pasted below the original. -->
+
 Setup a webserver on your Raspberry Pi. You can follow this online tutorial: [https://thepi.io/how-to-set-up-a-web-server-on-the-raspberry-pi/](https://thepi.io/how-to-set-up-a-web-server-on-the-raspberry-pi/).
 
 Do make sure to install the packages `php7.0-fpm php7.0-mysql` instead of `php5-fpm php5-mysql`.
