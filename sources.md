@@ -6,3 +6,4 @@
 * Chown and chgrp: http://www.thegeekstuff.com/2012/06/chown-examples/
 * Chmod: http://www.computerhope.com/unix/uchmod.htm
 * Shell scripting: http://linuxcommand.org/lc3_wss0010.php
+* Interfacing with I2C Devices: [https://elinux.org/Interfacing_with_I2C_Devices](https://elinux.org/Interfacing_with_I2C_Devices) 

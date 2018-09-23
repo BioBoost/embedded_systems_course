@@ -117,3 +117,150 @@ Continue? [Y/n]
 ```
 
 The device at address `0x48` is the temperature sensor and the accelerometer has an address of `0x4c`. Both are chips available on the application board. Now turn around the application board and check the addresses that are specified there.
+
+## I2C from C++
+
+Communicating with I2C devices can be achieved from many programming languages. C++ is one of them.
+
+> **HINT** - **Use C++ 11 standard**
+> 
+> Make sure to compile your application using the C++ 11 standard. Pass this to the compiler when compiling your application. For example: `g++ -std=c++11 main.cpp -o i2c`
+
+### Opening the Bus
+
+In order to communicate with an I2C peripheral one must first open the bus for reading and writing like you would any file. A call to `open` must be used rather than `fopen` so that writes to the bus are not buffered. This functions returns a new file descriptor (a non-negative integer) which can then be used to configure the bus.
+
+A typical reason for failure at this stage is a lack of permissions to access the device file. Adding the user to a group which has permissions to access the file will alleviate this problem, as will adjusting the file permissions to enable user access.
+
+```c++
+const std::string DEVICE = "/dev/i2c-1";
+
+int i2cfile;
+if ((i2cfile = open(DEVICE.c_str(), O_RDWR)) < 0) {
+    cout << "Could not open bus" << endl;
+    exit(1);
+}
+cout << "Successfully opened the i2c bus" << endl;
+
+// ...
+
+// Make sure to close the handle
+close(i2cfile);
+```
+
+### Initiating communication
+
+After successfully acquiring bus access, you must initiate communication with whatever peripheral you are attempting to utilize. I2C does this by sending out the seven bit address of the device followed by a read/write bit. The bit is set to 0 for writes and 1 for reads. This is another common failure point, as manufacturers tend to report the I2C address of the peripheral in a variety of ways. Some report the address as a seven bit number, meaning that the address must be shifted left by a bit and then have the R/W bit tacked onto the end. Others will provide it as an eight bit number and assume you will set the last bit accordingly. Although a few manufacturers actually say which method they use to describe the address, the vast majority do not, and the user may have to resort to testing via trial and error.
+
+> **HINT** - **i2cdetect**
+> 
+> Again this is where i2cdetect comes in handy. Just hang an RPi to the bus and scan it.
+
+The calls to `read()` and `write()` after the `ioctl()` will automatically set the proper read and write bit when signaling the peripheral.
+
+```c++
+const int SLAVE_ADDRESS = 0x32;          // The I2C address of the slave device
+if (ioctl(i2cfile, I2C_SLAVE, SLAVE_ADDRESS) < 0) {
+    cout << "Failed to acquire bus access and/or talk to slave." << endl;
+    exit(1);
+}
+cout << "Ready to communicate with slave device" << endl;
+```
+
+### Reading from the slave device
+
+The `read()` function wraps a read system call is used to obtain data from the I2C peripheral. Read requires a file handle, a buffer to store the data, and a number of bytes to read. The `read()` function will attempt to read the number of bytes specified and will return the actual number of bytes read, which can be used to detect errors.
+
+```c++
+const unsigned int BUFFER_SIZE = 10;
+// ...
+char buffer[BUFFER_SIZE] = { 0 };
+if (read(i2cfile, buffer, 2) != 2) {
+    cout << "Failed to read from the i2c device." << endl;
+} else {
+    cout << "Read from device: ";
+    cout << std::hex << "0x" << (int)buffer[0] << " 0x" << (int)buffer[1] << endl;
+}
+```
+
+### Writing to the slave device
+
+The `write()` function that wraps a write system call is used to send data to the I2C peripheral. The `write()` function requires a file handle, a buffer in which the data is stored, and a number of bytes to write. It will attempt to write the number of bytes specified and will return the actual number of bytes written, which can be used to detect errors.
+
+Some devices require an internal address to be sent prior to the data to specify the register on the external device to access. For devices with more than one configuration register, the address of the register should be written first, followed by the data to be placed there. See the datasheet of your peripheral for specifics.
+
+```c++
+char buffer[] = { 0x00 };
+if (write(i2cfile, buffer, 1) != 1) {
+    cout << "Failed to write to the i2c device." << endl;
+} else {
+    cout << "Successfully wrote to the i2c device." << endl;
+}
+```
+
+### Waiting between transactions
+
+When executing multiple read and/or write transactions, it may be necessary to wait between these transactions. This depends on the speed of the peripheral.
+
+The problem in C++ is that there was no real standard before C++ 11. Windows implementations differ strongly from Unix ones, and so do their precision's. On top of this, neither operating system is a real-time operating system, so requesting to sleep for 10 milliseconds may result in a real sleep of 500 milliseconds.
+
+As C++ 11 is used here, you can make use of the code snippet below:
+
+```C++
+#include <chrono>
+#include <thread>
+
+//...
+
+std::this_thread::sleep_for(std::chrono::milliseconds(100));
+```
+
+This function may block for longer than `sleep_duration` due to scheduling or resource contention delays. The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
+
+## Reading application board temperature sensor
+
+Attaching the mBed with its application board, also provides access to an LM75B temperature sensor. This device is present at I2C address `0x48` (7-bit). The code below can be used to read its value in degrees.
+
+```c++
+// Compile using g++ -std=c++11 main.cpp -o i2c
+#include <iostream>
+#include <unistd.h>   // close
+#include <fcntl.h>    // O_RDWR
+#include <sys/ioctl.h>
+#include <linux/i2c-dev.h>  // I2C_SLAVE
+
+using namespace std;
+
+int main(void) {
+  const std::string DEVICE = "/dev/i2c-1";
+  const unsigned int BUFFER_SIZE = 10;
+
+  int i2cfile;
+  if ((i2cfile = open(DEVICE.c_str(), O_RDWR)) < 0) {
+      cout << "Could not open bus" << endl;
+      exit(1);
+  }
+  cout << "Successfully opened the i2c bus" << endl;
+
+  const int SLAVE_ADDRESS = 0x48;          // The I2C address of the slave device
+  if (ioctl(i2cfile, I2C_SLAVE, SLAVE_ADDRESS) < 0) {
+      cout << "Failed to acquire bus access and/or talk to slave." << endl;
+      exit(1);
+  }
+  cout << "Ready to communicate with slave device" << endl;
+
+  char buffer[BUFFER_SIZE] = { 0 };
+  if (read(i2cfile, buffer, 2) != 2) {
+      cout << "Failed to read from the i2c device." << endl;
+  } else {
+      cout << "Read from device: ";
+      double temperature = ((buffer[0] << 8) | (buffer[1])) / 256.0;
+      cout << "The current temperature is " << temperature << " degrees Celsius" << endl;
+  }
+
+  // Make sure to close the handle
+  close(i2cfile);
+
+  return 0;
+}
+```
