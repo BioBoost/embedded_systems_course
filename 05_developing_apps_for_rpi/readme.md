@@ -219,10 +219,12 @@ sudo smbpasswd -a pi
 
 **Restart the Samba service** using `sudo service smbd restart`.
 
-### Opening the shared folder
+### Opening the shared folder from Windows
 
 Now you should be able to traverse to the share using the network url: `\\<ip>\iot_projects`. It will request the credentials of the `pi` user so enter the password of the Samba `pi` user.
 
 ![RPi Network Share](img/network_share.png)
 
 Make sure to regularly backup the folder so you don't lose any projects during the course.
+
+<!-- How about MAC and Linux? -->
