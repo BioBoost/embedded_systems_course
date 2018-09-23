@@ -24,7 +24,6 @@ While interpretation and compilation are the two main means by which programming
 >
 > Just-in-time compilation has gained mainstream attention amongst language implementors in recent years, with Java, the .NET Framework, most modern JavaScript implementations, and Matlab now including JITs.
 
-
 | Compiler | Interpreter|
 |----------|------------|
 | Compiler works on the complete program at once. It takes the entire program as input. | Interpreter program works line-by-line. It takes one statement at a time as input.|
@@ -148,6 +147,7 @@ Conclusion: don't make your life harder than needed and use g++ to compile your 
 The current approach - creating an app on the RPi itself - is doable because it's only a very small application. However, when your projects starts to grow, this is not a feasible approach anymore. We need to be able to develop our applications on our development machine using our tools such as Visual Code.
 
 There are a couple of approaches we can take here:
+
 * Transfer our source code **via GitHub**. This is slow and tedious and we would also need to commit non-tested code. So that is not a good path to be taking.
 * Use **secure copy** to transfer our code to the RPi. This is doable but still tedious as a copy action takes up time, especially if the project contains a lot of files.
 * Setup a **network share** on the RPi and develop inside of this directory using our Windows machine. This is probable the best approach for the moment.
