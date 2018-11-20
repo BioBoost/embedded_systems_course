@@ -79,6 +79,12 @@ echo '/usr/local/lib' | tee /etc/ld.so.conf.d/mqttpp.conf
 cd /usr/local/include/
 wget https://raw.githubusercontent.com/nlohmann/json/v3.2.0/single_include/nlohmann/json.hpp
 
+# Thread safe lib
+cd /usr/local/src
+git clone https://github.com/BioBoost/thread_safe.git
+cd thread_safe && git checkout v1.0.0
+cp -r include/thread_safe /usr/local/include
+
 # Cpp RestClient - Doesnt seem like hes using tags like he should
 cd /usr/local/src
 git clone https://github.com/mrtazz/restclient-cpp.git
@@ -125,7 +131,7 @@ CFLAGS=-c -Wall -std=c++11
 # LDFLAGS=
 
 # Libraries
-LIBS=-lpaho-mqttpp3 -lpaho-mqtt3a -lbioslogger -lsimple_mqtt_client
+LIBS=-lpaho-mqttpp3 -lpaho-mqtt3a -lpthread -lbioslogger -lsimple_mqtt_client
 
 # Name of executable output
 TARGET=nubg_touchberry
