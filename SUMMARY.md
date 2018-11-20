@@ -26,6 +26,12 @@
 * [Communicating using I2C](06_communicating_using_i2c/readme.md)
 * [Challenges](06_communicating_using_i2c/challenges.md)
 
+
+### TouchBerry Pi Controller
+
+* [TouchBerry Pi Controller](08_touchberry_pi_controller/readme.md)
+<!-- * [Challenges](08_touchberry_pi_controller/challenges.md) -->
+
 ----
 
 ### Sources
