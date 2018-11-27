@@ -200,13 +200,15 @@ Scroll to the bottom and add the following:
 
 ```config
 # Sharing our IoT Projects directory
-[iot_share]
+[iot_projects]
  comment=IoT Projects Share
  path=/home/pi/iot_projects
  browseable=Yes
  writeable=Yes
  only guest=no
  public=no
+ create mask=0664
+ directory mask=0775
 ```
 
 Notice how we tell Samba that public access is not allowed via `public=no` – this means that anyone wanting to access the shared folder must login with a valid user.
