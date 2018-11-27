@@ -26,6 +26,10 @@
 * [Communicating using I2C](06_communicating_using_i2c/readme.md)
 * [Challenges](06_communicating_using_i2c/challenges.md)
 
+### Makefiles
+
+* [Makefiles](07_makefiles/readme.md)
+
 ----
 
 ### Sources
