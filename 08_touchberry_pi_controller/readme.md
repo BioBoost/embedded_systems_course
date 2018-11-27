@@ -167,3 +167,41 @@ It's a header only version so not a lot of work to install it.
 ## Documentation
 
 Make sure to document your project with a `README.md`.
+
+## Controlling NUBG Tanks
+
+The frontend of the NUBG tank game can be found at [http://battle.nubg.world/](http://battle.nubg.world/). Now the goal is to setup a tank and control is with your controller.
+
+To control your tank you will need a token from the teacher. Give a username to the teacher and you will receive a JWT token which can be used to authenticate.
+
+All communication is handled via the labict MQTT broker which can be found at `mqtt.labict.be`.
+
+You can find examples on how to use the `simple_mqtt_client` library at [https://github.com/iot-devices-2019/simple_mqtt_client/blob/master/examples/hello_mqtt.cpp](https://github.com/iot-devices-2019/simple_mqtt_client/blob/master/examples/hello_mqtt.cpp).
+
+### Registering your tank
+
+You can register your tank by publishing the following json (with `<tankname>` replaced with the name you provided to the teacher) to `test/nubg/join`:
+
+```json
+{
+	"name": "<tankname>"
+}
+```
+
+### Controlling your tank
+
+Your tank can be controlled by publishing to `test/nubg/devgame/update`. For this you will need to provide a relative distance (drive) and an angle (turn).
+
+```json
+{
+	"token": "<JWT-TOKEN>",
+	"drive": 10,
+	"turn": 30
+}
+```
+
+Make sure to take it easy at the beginning because the server is still under development. For the moment there is no boundary checking.
+
+### Game State
+
+The full game state is published by the server on the topic `test/nubg/devgame/gamestate`. So there you can find your tank if you lose it.
