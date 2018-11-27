@@ -30,6 +30,10 @@
 
 * [Makefiles](07_makefiles/readme.md)
 
+### TouchBerry Pi Controller
+
+* [TouchBerry Pi Controller](08_touchberry_pi_controller/readme.md)
+
 ----
 
 ### Sources
